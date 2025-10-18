@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --glass: rgba(255,255,255,0.6);
+}
+
+/* Base fonts */
+body {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Glass utility */
+.glass {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* subtle gradient background */
+.bg-hero {
+  background: linear-gradient(120deg, rgba(139,92,246,0.08), rgba(6,182,212,0.06));
+}
+
+/* CTA gradient */
+.btn-gradient {
+  background: linear-gradient(90deg, #06b6d4, #8b5cf6);
+  color: white;
+}
