@@ -6,10 +6,6 @@
   --glass: rgba(255,255,255,0.6);
 }
 
-/* Base fonts */
-body {
-  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-}
 
 /* Glass utility */
 .glass {
@@ -27,4 +23,14 @@ body {
 .btn-gradient {
   background: linear-gradient(90deg, #06b6d4, #8b5cf6);
   color: white;
+}
+
+body {
+
+  font-family: 'Satoshi', sans-serif;
+  scroll-behavior: smooth;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Clash Display', sans-serif;
 }

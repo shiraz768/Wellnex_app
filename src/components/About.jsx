@@ -1,5 +1,36 @@
+// src/components/AboutSection.jsx
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useState } from "react";
+import { getAboutData } from '../data/appData';
+
+// Import all required icons
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import PsychologyIcon from '@mui/icons-material/Psychology';
+import NatureIcon from '@mui/icons-material/Nature';
+import GroupsIcon from '@mui/icons-material/Groups';
+import FlagIcon from '@mui/icons-material/Flag';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import HandshakeIcon from '@mui/icons-material/Handshake';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+
+// Icon mapping function
+const getIconComponent = (iconName) => {
+  const icons = {
+    FavoriteIcon: FavoriteIcon,
+    PsychologyIcon: PsychologyIcon,
+    NatureIcon: NatureIcon,
+    GroupsIcon: GroupsIcon,
+    FlagIcon: FlagIcon,
+    TrendingUpIcon: TrendingUpIcon,
+    HandshakeIcon: HandshakeIcon,
+    ScheduleIcon: ScheduleIcon,
+    SentimentSatisfiedAltIcon: SentimentSatisfiedAltIcon,
+    RocketLaunchIcon: RocketLaunchIcon,
+  };
+  return icons[iconName] || FavoriteIcon;
+};
 
 export default function AboutSection() {
   const ref = useRef(null);
@@ -11,40 +42,13 @@ export default function AboutSection() {
 
   const [hoveredCard, setHoveredCard] = useState(null);
 
+  // Get dynamic data
+  const aboutData = getAboutData();
+
   // Enhanced scroll transformations
   const y = useTransform(scrollYProgress, [0, 1], [80, 0]);
   const opacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
-
-  const values = [
-    {
-      icon: "🎯",
-      title: "Human-Centered Design",
-      description: "Every feature is crafted with real people's wellness journeys in mind"
-    },
-    {
-      icon: "🚀",
-      title: "Cutting-Edge Technology",
-      description: "Leveraging AI and data science to deliver personalized insights"
-    },
-    {
-      icon: "🌱",
-      title: "Sustainable Growth",
-      description: "Building solutions that scale while maintaining quality and care"
-    },
-    {
-      icon: "🤝",
-      title: "Community First",
-      description: "Fostering connections between users, providers, and wellness advocates"
-    }
-  ];
-
-  const stats = [
-    { number: "10K+", label: "Lives Impacted" },
-    { number: "50+", label: "Wellness Partners" },
-    { number: "24/7", label: "Platform Availability" },
-    { number: "99%", label: "User Satisfaction" }
-  ];
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -131,9 +135,11 @@ export default function AboutSection() {
             transition={{ duration: 0.6 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 mb-8"
           >
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            {aboutData.badge.icon && (
+              <FlagIcon className="w-4 h-4 text-emerald-500" />
+            )}
             <span className="text-sm font-medium text-gray-700 tracking-wide">
-              Our Mission
+              {aboutData.badge.text}
             </span>
           </motion.div>
 
@@ -142,11 +148,11 @@ export default function AboutSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 tracking-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-body font-bold text-gray-900 mb-6 tracking-tight"
           >
-            Where Wellness Meets
+            {aboutData.title.split(' ').slice(0, -1).join(' ')}
             <span className="block bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-              Innovation
+              {aboutData.title.split(' ').pop()}
             </span>
           </motion.h2>
 
@@ -157,10 +163,7 @@ export default function AboutSection() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
           >
-            At <span className="font-semibold text-gray-900">Wellnex Systems</span>, we're 
-            redefining the future of health and fitness through intelligent, integrated technology. 
-            Born from the fusion of "Wellness" and "Next," our platform elevates how people connect 
-            with their bodies, minds, and communities.
+            {aboutData.description}
           </motion.p>
 
           {/* Mission Statement Card */}
@@ -168,14 +171,19 @@ export default function AboutSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="inline-block bg-white border border-gray-200 rounded-2xl px-8 py-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
+            className="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-8 py-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
             whileHover={{ y: -5, scale: 1.02 }}
           >
-            <div className="text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors duration-300">
-              We're Not Just Building Apps.
-            </div>
-            <div className="text-gray-600 mt-1">
-              We're Building a Movement.
+            {aboutData.missionStatement.icon && (
+              <RocketLaunchIcon className="w-5 h-5 text-emerald-500" />
+            )}
+            <div>
+              <div className="text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors duration-300">
+                {aboutData.missionStatement.text}
+              </div>
+              <div className="text-gray-600 text-sm">
+                {aboutData.missionStatement.subtext}
+              </div>
             </div>
           </motion.div>
         </motion.div>
@@ -187,49 +195,52 @@ export default function AboutSection() {
           animate={isInView ? "visible" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
         >
-          {values.map((value, index) => (
-            <motion.div
-              key={value.title}
-              variants={itemVariants}
-              className="relative group"
-              onMouseEnter={() => setHoveredCard(index)}
-              onMouseLeave={() => setHoveredCard(null)}
-            >
+          {aboutData.values.map((value, index) => {
+            const ValueIcon = getIconComponent(value.icon);
+            return (
               <motion.div
-                className="bg-white rounded-2xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-500 cursor-pointer h-full"
-                whileHover={{ 
-                  y: -10,
-                  transition: { duration: 0.2 }
-                }}
-                animate={{
-                  borderColor: hoveredCard === index ? 'rgba(16, 185, 129, 0.3)' : 'rgba(229, 231, 235, 1)'
-                }}
+                key={value.title}
+                variants={itemVariants}
+                className="relative group"
+                onMouseEnter={() => setHoveredCard(index)}
+                onMouseLeave={() => setHoveredCard(null)}
               >
-                {/* Icon */}
                 <motion.div
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-2xl mb-4 mx-auto group-hover:scale-110 transition-transform duration-300"
-                  whileHover={{ rotate: 5 }}
+                  className="bg-white rounded-2xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-500 cursor-pointer h-full"
+                  whileHover={{ 
+                    y: -10,
+                    transition: { duration: 0.2 }
+                  }}
+                  animate={{
+                    borderColor: hoveredCard === index ? 'rgba(16, 185, 129, 0.3)' : 'rgba(229, 231, 235, 1)'
+                  }}
                 >
-                  {value.icon}
+                  {/* Icon */}
+                  <motion.div
+                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white mb-4 mx-auto group-hover:scale-110 transition-transform duration-300"
+                    whileHover={{ rotate: 5 }}
+                  >
+                    <ValueIcon className="w-6 h-6" />
+                  </motion.div>
+
+                  {/* Content */}
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    {value.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    {value.description}
+                  </p>
+
+                  {/* Hover indicator */}
+                  <motion.div
+                    className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    animate={hoveredCard === index ? { scaleX: [0, 1] } : {}}
+                    transition={{ duration: 0.3 }}
+                  />
                 </motion.div>
-
-                {/* Content */}
-                <h3 className="text-lg font-bold text-gray-900 mb-2">
-                  {value.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {value.description}
-                </p>
-
-                {/* Hover indicator */}
-                <motion.div
-                  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  animate={hoveredCard === index ? { scaleX: [0, 1] } : {}}
-                  transition={{ duration: 0.3 }}
-                />
               </motion.div>
-            </motion.div>
-          ))}
+            );
+          })}
         </motion.div>
 
         {/* Stats Section */}
@@ -244,27 +255,41 @@ export default function AboutSection() {
             <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20" />
           </div>
 
-          <h3 className="text-2xl font-bold text-white mb-12 relative z-10">
-            Our Impact in Numbers
-          </h3>
+          <div className="flex items-center justify-center gap-2 mb-12 relative z-10">
+            <TrendingUpIcon className="w-6 h-6 text-white" />
+            <h3 className="text-2xl font-bold text-white">
+              Our Impact in Numbers
+            </h3>
+          </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ delay: 0.8 + (index * 0.1) }}
-                className="text-center"
-              >
-                <div className="text-3xl font-bold text-white mb-2">
-                  {stat.number}
-                </div>
-                <div className="text-gray-300 text-sm font-medium">
-                  {stat.label}
-                </div>
-              </motion.div>
-            ))}
+            {aboutData.stats.map((stat, index) => {
+              const StatIcon = getIconComponent(stat.icon);
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                  transition={{ delay: 0.8 + (index * 0.1) }}
+                  className="text-center group"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <StatIcon className="w-4 h-4" style={{ 
+                      color: index === 0 ? '#10b981' : 
+                             index === 1 ? '#3b82f6' : 
+                             index === 2 ? '#8b5cf6' : 
+                             '#f59e0b' 
+                    }} />
+                    <div className="text-3xl font-bold text-white group-hover:scale-110 transition-transform duration-300">
+                      {stat.number}
+                    </div>
+                  </div>
+                  <div className="text-gray-300 text-sm font-medium">
+                    {stat.label}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </motion.div>
       </div>

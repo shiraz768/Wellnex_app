@@ -1,5 +1,14 @@
 import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useInView } from 'framer-motion'
+import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions'
+import PsychologyIcon from '@mui/icons-material/Psychology'
+import ScaleIcon from '@mui/icons-material/Scale'
+import ArchitectureIcon from '@mui/icons-material/Architecture'
+import GroupsIcon from '@mui/icons-material/Groups'
+import ScheduleIcon from '@mui/icons-material/Schedule'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 
 function FeatureCard({ title, description, icon, index, isInView }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -26,8 +35,6 @@ function FeatureCard({ title, description, icon, index, isInView }) {
     x.set(xPct)
     y.set(yPct)
   }
-
-  const icons = ["🔄", "🤖", "📈", "🔮"]
 
   return (
     <motion.div
@@ -69,7 +76,7 @@ function FeatureCard({ title, description, icon, index, isInView }) {
       <div className="relative z-10">
         {/* Icon */}
         <motion.div
-          className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-2xl mb-4 group-hover:scale-110 transition-transform duration-300"
+          className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300"
           whileHover={{ rotate: 5 }}
         >
           {icon}
@@ -102,29 +109,41 @@ export default function Why() {
     {
       title: 'Integrated Wellness Ecosystem',
       description: 'Seamlessly connect physical, mental, and emotional health data in one unified platform for holistic wellbeing tracking.',
-      icon: '🔄'
+      icon: <IntegrationInstructionsIcon className="w-6 h-6" />
     },
     {
       title: 'AI-Driven Personalization',
       description: 'Smart algorithms analyze your patterns to deliver tailored recommendations and insights that evolve with your journey.',
-      icon: '🤖'
+      icon: <PsychologyIcon className="w-6 h-6" />
     },
     {
       title: 'Enterprise-Grade Scalability',
       description: 'From boutique studios to national gym chains, our platform scales to meet the needs of any wellness business.',
-      icon: '📈'
+      icon: <ScaleIcon className="w-6 h-6" />
     },
     {
       title: 'Future-Ready Architecture',
       description: 'Cloud-native, mobile-first design with privacy-by-default principles ensures your data remains secure and accessible.',
-      icon: '🔮'
+      icon: <ArchitectureIcon className="w-6 h-6" />
     }
   ]
 
   const stats = [
-    { number: '50K+', label: 'Active Users' },
-    { number: '99.9%', label: 'Uptime' },
-    { number: '40%', label: 'Faster Results' }
+    { 
+      number: '50K+', 
+      label: 'Active Users',
+      icon: <GroupsIcon className="w-4 h-4 text-emerald-500" />
+    },
+    { 
+      number: '99.9%', 
+      label: 'Uptime',
+      icon: <ScheduleIcon className="w-4 h-4 text-blue-500" />
+    },
+    { 
+      number: '40%', 
+      label: 'Faster Results',
+      icon: <TrendingUpIcon className="w-4 h-4 text-purple-500" />
+    }
   ]
 
   const containerVariants = {
@@ -164,7 +183,7 @@ export default function Why() {
           <div className="space-y-8">
             <motion.div variants={itemVariants}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 mb-6">
-                <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                <CheckCircleIcon className="w-4 h-4 text-emerald-500" />
                 <span className="text-sm font-medium text-gray-700 tracking-wide">
                   Why Choose Wellnex
                 </span>
@@ -184,10 +203,13 @@ export default function Why() {
                   <motion.div
                     key={index}
                     variants={itemVariants}
-                    className="text-center"
+                    className="text-center group"
                   >
-                    <div className="text-2xl font-bold text-gray-900 mb-1">
-                      {stat.number}
+                    <div className="flex items-center justify-center gap-2 mb-2">
+                      {stat.icon}
+                      <div className="text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform duration-300">
+                        {stat.number}
+                      </div>
                     </div>
                     <div className="text-sm text-gray-600 font-medium">
                       {stat.label}
@@ -238,14 +260,7 @@ export default function Why() {
             className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto group"
           >
             <span>Start Your Journey</span>
-            <motion.svg
-              className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </motion.svg>
+            <ArrowForwardIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
           </motion.button>
         </motion.div>
       </div>

@@ -1,0 +1,439 @@
+{
+  "navbar": {
+    "logo": {
+      "text": "Wellnex",
+      "subtext": "SYSTEMS",
+      "icon": "PsychologyIcon"
+    },
+    "navItems": [
+      { "id": "about", "label": "About" },
+      { "id": "apps", "label": "Apps" },
+      { "id": "why", "label": "Why Us" },
+      { "id": "roadmap", "label": "Roadmap" },
+      { "id": "testimonials", "label": "Testimonials" }
+    ],
+    "ctaButton": {
+      "text": "Join Waitlist",
+      "target": "waitlist"
+    }
+  },
+  "about": {
+    "badge": {
+      "text": "Our Mission",
+      "icon": "FlagIcon"
+    },
+    "title": "Where Wellness Meets Innovation",
+    "description": "At Wellnex Systems, we're redefining the future of health and fitness through intelligent, integrated technology. Born from the fusion of 'Wellness' and 'Next,' our platform elevates how people connect with their bodies, minds, and communities.",
+    "missionStatement": {
+      "text": "We're Not Just Building Apps.",
+      "subtext": "We're Building a Movement.",
+      "icon": "RocketLaunchIcon"
+    },
+    "values": [
+      {
+        "title": "Human-Centered Design",
+        "description": "Every feature is crafted with real people's wellness journeys in mind",
+        "icon": "FavoriteIcon"
+      },
+      {
+        "title": "Cutting-Edge Technology",
+        "description": "Leveraging AI and data science to deliver personalized insights",
+        "icon": "PsychologyIcon"
+      },
+      {
+        "title": "Sustainable Growth",
+        "description": "Building solutions that scale while maintaining quality and care",
+        "icon": "NatureIcon"
+      },
+      {
+        "title": "Community First",
+        "description": "Fostering connections between users, providers, and wellness advocates",
+        "icon": "GroupsIcon"
+      }
+    ],
+    "stats": [
+      {
+        "number": "10K+",
+        "label": "Lives Impacted",
+        "icon": "FavoriteIcon"
+      },
+      {
+        "number": "50+",
+        "label": "Wellness Partners",
+        "icon": "HandshakeIcon"
+      },
+      {
+        "number": "24/7",
+        "label": "Platform Availability",
+        "icon": "ScheduleIcon"
+      },
+      {
+        "number": "99%",
+        "label": "User Satisfaction",
+        "icon": "SentimentSatisfiedAltIcon"
+      }
+    ]
+  },
+  "apps": {
+    "badge": {
+      "text": "Our Products",
+      "icon": "AppsIcon"
+    },
+    "title": "Wellness Ecosystem",
+    "description": "Integrated solutions for mind and body wellness, powered by cutting-edge technology",
+    "apps": [
+      {
+        "title": "SoulWhispers",
+        "subtitle": "Mental Wellness Companion",
+        "cta": "iOS & Android",
+        "ctaIcon": "SmartphoneIcon",
+        "mainIcon": "PsychologyIcon",
+        "features": [
+          {
+            "text": "AI-powered mood tracking and insights",
+            "icon": "MonitorHeartIcon"
+          },
+          {
+            "text": "Personalized meditation & therapy sessions",
+            "icon": "PsychologyIcon"
+          },
+          {
+            "text": "Seamless telehealth appointments",
+            "icon": "ScheduleIcon"
+          },
+          {
+            "text": "Smart journaling with emotional analytics",
+            "icon": "AnalyticsIcon"
+          }
+        ]
+      },
+      {
+        "title": "GymKey",
+        "subtitle": "Smart Fitness Ecosystem",
+        "cta": "Web & Mobile",
+        "ctaIcon": "LanguageIcon",
+        "mainIcon": "FitnessCenterIcon",
+        "features": [
+          {
+            "text": "Contactless access to 500+ partner gyms",
+            "icon": "FitnessCenterIcon"
+          },
+          {
+            "text": "AI workout planning and performance tracking",
+            "icon": "PsychologyIcon"
+          },
+          {
+            "text": "Real-time class scheduling & bookings",
+            "icon": "CalendarMonthIcon"
+          },
+          {
+            "text": "Comprehensive gym management suite",
+            "icon": "GroupsIcon"
+          }
+        ]
+      }
+    ],
+    "bottomCta": {
+      "text": "Schedule a Demo",
+      "icon": "CalendarMonthIcon"
+    }
+  },
+  "why": {
+    "badge": {
+      "text": "Why Choose Wellnex",
+      "icon": "CheckCircleIcon"
+    },
+    "title": "The Complete Wellness Platform",
+    "description": "Integrated features, AI personalization, and enterprise-ready tooling make Wellnex the platform for the next generation of wellness.",
+    "features": [
+      {
+        "title": "Integrated Wellness Ecosystem",
+        "description": "Seamlessly connect physical, mental, and emotional health data in one unified platform for holistic wellbeing tracking.",
+        "icon": "IntegrationInstructionsIcon"
+      },
+      {
+        "title": "AI-Driven Personalization",
+        "description": "Smart algorithms analyze your patterns to deliver tailored recommendations and insights that evolve with your journey.",
+        "icon": "PsychologyIcon"
+      },
+      {
+        "title": "Enterprise-Grade Scalability",
+        "description": "From boutique studios to national gym chains, our platform scales to meet the needs of any wellness business.",
+        "icon": "ScaleIcon"
+      },
+      {
+        "title": "Future-Ready Architecture",
+        "description": "Cloud-native, mobile-first design with privacy-by-default principles ensures your data remains secure and accessible.",
+        "icon": "ArchitectureIcon"
+      }
+    ],
+    "stats": [
+      {
+        "number": "50K+",
+        "label": "Active Users",
+        "icon": "GroupsIcon"
+      },
+      {
+        "number": "99.9%",
+        "label": "Uptime",
+        "icon": "ScheduleIcon"
+      },
+      {
+        "number": "40%",
+        "label": "Faster Results",
+        "icon": "TrendingUpIcon"
+      }
+    ],
+    "bottomCta": {
+      "text": "Start Your Journey",
+      "icon": "ArrowForwardIcon"
+    }
+  },
+  "roadmap": {
+    "badge": {
+      "text": "Product Roadmap",
+      "icon": "TimelineIcon"
+    },
+    "title": "Our Journey Ahead",
+    "description": "Building the future of wellness technology, one phase at a time",
+    "phases": [
+      {
+        "phase": 1,
+        "title": "Core Platform Launch",
+        "description": "Establishing the foundation with our flagship wellness applications and basic ecosystem integration.",
+        "status": "completed",
+        "icon": "RocketLaunchIcon",
+        "features": [
+          "SoulWhispers mental wellness platform",
+          "GymKey fitness access system",
+          "Basic user dashboard & analytics",
+          "Mobile applications launch"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Enhanced Integration",
+        "description": "Expanding platform capabilities with advanced features and third-party integrations.",
+        "status": "active",
+        "icon": "IntegrationInstructionsIcon",
+        "features": [
+          "Wearable device integration (Apple Watch, Fitbit)",
+          "Advanced AI wellness insights",
+          "Nutrition and meal planning module",
+          "Corporate wellness dashboards"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Unified Wellnex Platform",
+        "description": "Bringing fitness, nutrition, mental health, and diagnostics into a single intelligent dashboard.",
+        "status": "upcoming",
+        "icon": "DashboardIcon",
+        "features": [
+          "Comprehensive health analytics suite",
+          "Predictive wellness recommendations",
+          "Healthcare provider integration",
+          "Advanced corporate wellness solutions"
+        ]
+      }
+    ],
+    "statusConfig": {
+      "completed": {
+        "color": "bg-emerald-500",
+        "text": "Completed",
+        "icon": "CheckCircleIcon"
+      },
+      "active": {
+        "color": "bg-blue-500",
+        "text": "In Progress",
+        "icon": "AutorenewIcon"
+      },
+      "upcoming": {
+        "color": "bg-gray-400",
+        "text": "Coming Soon",
+        "icon": "ScheduleIcon"
+      }
+    },
+    "cta": {
+      "title": "Join Our Journey",
+      "description": "Be the first to experience new features and help shape the future of wellness technology.",
+      "buttonText": "Get Early Access",
+      "icon": "GroupIcon"
+    }
+  },
+  "testimonials": {
+    "badge": {
+      "text": "User Stories",
+      "icon": "FormatQuoteIcon"
+    },
+    "title": "Trusted by Wellness Champions",
+    "description": "Discover how Wellnex Systems is transforming lives and businesses across the wellness industry",
+    "testimonials": [
+      {
+        "quote": "SoulWhispers helped me find calm in chaos. The AI insights and personalized meditation sessions have been transformative. It's like having a therapist in my pocket.",
+        "author": "Ayesha R.",
+        "role": "Mental Wellness Advocate",
+        "location": "Karachi",
+        "avatar": "PsychologyIcon",
+        "roleIcon": "FavoriteIcon",
+        "rating": 5
+      },
+      {
+        "quote": "GymKey has completely transformed how I manage my fitness business. The seamless check-in system and member analytics have increased retention by 40%. My members love the convenience.",
+        "author": "Imran M.",
+        "role": "Gym Owner",
+        "location": "Lahore",
+        "avatar": "FitnessCenterIcon",
+        "roleIcon": "BusinessCenterIcon",
+        "rating": 5
+      },
+      {
+        "quote": "The Wellnex platform brought all my wellness data together. From workout tracking to mental health insights, having everything in one dashboard has been a game-changer for my holistic health journey.",
+        "author": "Sarah T.",
+        "role": "Wellness Coach",
+        "location": "Islamabad",
+        "avatar": "EmojiPeopleIcon",
+        "roleIcon": "GroupsIcon",
+        "rating": 5
+      }
+    ],
+    "navigation": {
+      "prevIcon": "NavigateBeforeIcon",
+      "nextIcon": "NavigateNextIcon",
+      "playIcon": "PlayArrowIcon",
+      "pauseIcon": "PauseIcon"
+    }
+  },
+  "waitlist": {
+    "badge": {
+      "text": "Early Access",
+      "icon": "AccessTimeIcon"
+    },
+    "title": "Join the Wellness Revolution",
+    "description": "Be among the first to experience the future of integrated wellness technology with early access, exclusive beta invites, and founding member benefits.",
+    "form": {
+      "placeholder": "Enter your email address",
+      "buttonText": "Join Waitlist",
+      "buttonIcon": "GroupsIcon",
+      "emailIcon": "EmailIcon",
+      "successMessage": "Welcome aboard! We'll be in touch soon with updates.",
+      "successIcon": "CheckCircleIcon"
+    },
+    "features": [
+      {
+        "title": "Early Access",
+        "description": "Be first to try new features",
+        "icon": "RocketLaunchIcon"
+      },
+      {
+        "title": "Exclusive Offers",
+        "description": "Founding member benefits",
+        "icon": "LocalOfferIcon"
+      },
+      {
+        "title": "Direct Feedback",
+        "description": "Shape product development",
+        "icon": "FeedbackIcon"
+      }
+    ],
+    "footerLinks": [
+      {
+        "label": "Contact Us",
+        "href": "mailto:info@wellnexsystems.com",
+        "icon": "ContactMailIcon"
+      },
+      {
+        "label": "Privacy Policy",
+        "href": "#privacy",
+        "icon": "PolicyIcon"
+      },
+      {
+        "label": "Terms of Service",
+        "href": "#terms",
+        "icon": "DescriptionIcon"
+      }
+    ]
+  },
+  "footer": {
+    "company": {
+      "name": "Wellnex Systems",
+      "tagline": "Wellness, Reimagined",
+      "description": "Empowering individuals and businesses with intelligent wellness technology that transforms lives and builds healthier communities.",
+      "logoIcon": "PsychologyIcon"
+    },
+    "contact": [
+      {
+        "type": "email",
+        "value": "info@wellnexsystems.com",
+        "href": "mailto:info@wellnexsystems.com",
+        "icon": "EmailIcon"
+      },
+      {
+        "type": "website",
+        "value": "wellnexsystems.com",
+        "href": "https://wellnexsystems.com",
+        "icon": "LanguageIcon"
+      }
+    ],
+    "sections": [
+      {
+        "title": "Product",
+        "links": [
+          { "name": "SoulWhispers", "href": "#apps", "icon": "PsychologyIcon" },
+          { "name": "GymKey", "href": "#apps", "icon": "FitnessCenterIcon" },
+          { "name": "Platform", "href": "#about", "icon": "DashboardIcon" },
+          { "name": "Roadmap", "href": "#roadmap", "icon": "TimelineIcon" }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          { "name": "About", "href": "#about", "icon": "InfoIcon" },
+          { "name": "Why Wellnex", "href": "#why", "icon": "QuestionAnswerIcon" },
+          { "name": "Testimonials", "href": "#testimonials", "icon": "FormatQuoteIcon" },
+          { "name": "Careers", "href": "#", "icon": "WorkIcon" }
+        ]
+      },
+      {
+        "title": "Support",
+        "links": [
+          { "name": "Help Center", "href": "#", "icon": "HelpCenterIcon" },
+          { "name": "Contact", "href": "mailto:info@wellnexsystems.com", "icon": "EmailIcon" },
+          { "name": "Privacy", "href": "#", "icon": "PolicyIcon" },
+          { "name": "Terms", "href": "#", "icon": "DescriptionIcon" }
+        ]
+      }
+    ],
+    "socialLinks": [
+      { "name": "Twitter", "href": "#", "icon": "XIcon" },
+      { "name": "LinkedIn", "href": "#", "icon": "LinkedInIcon" },
+      { "name": "Instagram", "href": "#", "icon": "InstagramIcon" },
+      { "name": "YouTube", "href": "#", "icon": "YouTubeIcon" }
+    ],
+    "legalLinks": [
+      { "name": "Privacy Policy", "href": "#privacy", "icon": "PolicyIcon" },
+      { "name": "Terms of Service", "href": "#terms", "icon": "DescriptionIcon" },
+      { "name": "Cookies", "href": "#cookies", "icon": "CookieIcon" }
+    ],
+    "cta": {
+      "title": "Ready to Transform Wellness?",
+      "description": "Join thousands of users and businesses already experiencing the future of integrated wellness technology.",
+      "buttonText": "Join the Movement",
+      "icon": "GroupsIcon"
+    }
+  },
+  "icons": {
+    "imports": [
+      "PsychologyIcon", "FitnessCenterIcon", "FlagIcon", "RocketLaunchIcon", "FavoriteIcon", 
+      "NatureIcon", "GroupsIcon", "HandshakeIcon", "ScheduleIcon", "SentimentSatisfiedAltIcon",
+      "AppsIcon", "MonitorHeartIcon", "AnalyticsIcon", "CalendarMonthIcon", "CheckCircleIcon",
+      "IntegrationInstructionsIcon", "ScaleIcon", "ArchitectureIcon", "TrendingUpIcon", 
+      "ArrowForwardIcon", "TimelineIcon", "DashboardIcon", "AutorenewIcon", "GroupIcon",
+      "FormatQuoteIcon", "NavigateBeforeIcon", "NavigateNextIcon", "PlayArrowIcon", "PauseIcon",
+      "EmojiPeopleIcon", "BusinessCenterIcon", "AccessTimeIcon", "LocalOfferIcon", "FeedbackIcon",
+      "ContactMailIcon", "PolicyIcon", "DescriptionIcon", "EmailIcon", "LanguageIcon",
+      "InfoIcon", "QuestionAnswerIcon", "WorkIcon", "HelpCenterIcon", "XIcon", "LinkedInIcon",
+      "InstagramIcon", "YouTubeIcon", "CookieIcon", "SmartphoneIcon"
+    ]
+  }
+}

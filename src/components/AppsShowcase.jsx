@@ -1,5 +1,19 @@
 import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import PsychologyIcon from '@mui/icons-material/Psychology'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import DownloadIcon from '@mui/icons-material/Download'
+import ExploreIcon from '@mui/icons-material/Explore'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import AppsIcon from '@mui/icons-material/Apps'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
+import SmartphoneIcon from '@mui/icons-material/Smartphone'
+import LanguageIcon from '@mui/icons-material/Language'
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart'
+import ScheduleIcon from '@mui/icons-material/Schedule'
+import AnalyticsIcon from '@mui/icons-material/Analytics'
+import GroupsIcon from '@mui/icons-material/Groups'
 
 function FeatureCard({ title, subtitle, items, cta, delay = 0, index }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -40,7 +54,30 @@ function FeatureCard({ title, subtitle, items, cta, delay = 0, index }) {
     "from-blue-500/10 to-purple-500/10"
   ]
 
-  const icons = ["🧠", "💪"]
+  const mainIcons = [
+    <PsychologyIcon className="w-6 h-6 text-emerald-600" />,
+    <FitnessCenterIcon className="w-6 h-6 text-blue-600" />
+  ]
+
+  const ctaIcons = [
+    <SmartphoneIcon className="w-4 h-4" />,
+    <LanguageIcon className="w-4 h-4" />
+  ]
+
+  const featureIcons = [
+    [
+      <MonitorHeartIcon className="w-4 h-4" />,
+      <PsychologyIcon className="w-4 h-4" />,
+      <ScheduleIcon className="w-4 h-4" />,
+      <AnalyticsIcon className="w-4 h-4" />
+    ],
+    [
+      <FitnessCenterIcon className="w-4 h-4" />,
+      <PsychologyIcon className="w-4 h-4" />,
+      <CalendarMonthIcon className="w-4 h-4" />,
+      <GroupsIcon className="w-4 h-4" />
+    ]
+  ]
 
   return (
     <motion.article
@@ -87,10 +124,10 @@ function FeatureCard({ title, subtitle, items, cta, delay = 0, index }) {
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-4">
             <motion.div
-              className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300"
+              className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center text-xl group-hover:scale-110 transition-transform duration-300 group-hover:bg-emerald-50"
               whileHover={{ rotate: 5 }}
             >
-              {icons[index]}
+              {mainIcons[index]}
             </motion.div>
             <div>
               <div className="text-sm font-medium text-gray-500 tracking-wide uppercase">
@@ -103,10 +140,11 @@ function FeatureCard({ title, subtitle, items, cta, delay = 0, index }) {
           </div>
           
           <motion.div
-            className="text-xs font-medium text-gray-400 px-3 py-1 rounded-full border border-gray-200 group-hover:border-gray-300 transition-colors duration-300"
+            className="text-xs font-medium text-gray-400 px-3 py-1 rounded-full border border-gray-200 group-hover:border-gray-300 transition-colors duration-300 flex items-center gap-1"
             whileHover={{ scale: 1.05 }}
           >
-            {cta}
+            {ctaIcons[index]}
+            <span>{cta}</span>
           </motion.div>
         </div>
 
@@ -125,9 +163,9 @@ function FeatureCard({ title, subtitle, items, cta, delay = 0, index }) {
                 className="w-6 h-6 rounded-full bg-emerald-500/10 flex items-center justify-center flex-shrink-0 mt-0.5 group-hover/item:bg-emerald-500/20 transition-colors duration-300"
                 whileHover={{ scale: 1.1, rotate: 5 }}
               >
-                <svg className="w-3 h-3 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+                <div className="text-emerald-500">
+                  {featureIcons[index][idx] || <CheckCircleIcon className="w-4 h-4" />}
+                </div>
               </motion.div>
               <span className="text-gray-600 leading-relaxed group-hover/item:text-gray-900 transition-colors duration-300">
                 {item}
@@ -146,15 +184,18 @@ function FeatureCard({ title, subtitle, items, cta, delay = 0, index }) {
             whileTap={{ scale: 0.98 }}
             className="w-full py-3 px-6 bg-gray-900 text-white font-semibold rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex items-center justify-center gap-3 group/btn"
           >
-            <span>{title.includes('Soul') ? 'Download App' : 'Explore Platform'}</span>
-            <motion.svg
-              className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </motion.svg>
+            {title.includes('Soul') ? (
+              <>
+                <DownloadIcon className="w-5 h-5" />
+                <span>Download App</span>
+              </>
+            ) : (
+              <>
+                <ExploreIcon className="w-5 h-5" />
+                <span>Explore Platform</span>
+              </>
+            )}
+            <ArrowForwardIcon className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
           </motion.button>
         </motion.div>
       </div>
@@ -218,7 +259,7 @@ export default function AppsShowcase() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm mb-6">
-            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            <AppsIcon className="w-4 h-4 text-emerald-500" />
             <span className="text-sm font-medium text-gray-700 tracking-wide">
               Our Products
             </span>
@@ -260,8 +301,9 @@ export default function AppsShowcase() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+            className="px-8 py-3 bg-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 mx-auto"
           >
+            <CalendarMonthIcon className="w-5 h-5" />
             Schedule a Demo
           </motion.button>
         </motion.div>

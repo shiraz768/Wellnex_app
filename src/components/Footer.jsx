@@ -1,5 +1,25 @@
 import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import EmailIcon from '@mui/icons-material/Email'
+import LanguageIcon from '@mui/icons-material/Language'
+import PsychologyIcon from '@mui/icons-material/Psychology'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import TimelineIcon from '@mui/icons-material/Timeline'
+import InfoIcon from '@mui/icons-material/Info'
+import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer'
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
+import WorkIcon from '@mui/icons-material/Work'
+import HelpCenterIcon from '@mui/icons-material/HelpCenter'
+import PolicyIcon from '@mui/icons-material/Policy'
+import DescriptionIcon from '@mui/icons-material/Description'
+import CookieIcon from '@mui/icons-material/Cookie'
+import XIcon from '@mui/icons-material/X'
+import LinkedInIcon from '@mui/icons-material/LinkedIn'
+import InstagramIcon from '@mui/icons-material/Instagram'
+import YouTubeIcon from '@mui/icons-material/YouTube'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import GroupsIcon from '@mui/icons-material/Groups'
 
 function FooterLink({ href, children, icon }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -43,7 +63,7 @@ function FooterLink({ href, children, icon }) {
       className="flex items-center gap-3 px-4 py-3 rounded-xl bg-white border border-gray-200 hover:border-gray-300 shadow-sm hover:shadow-md transition-all duration-300 group"
     >
       <motion.div
-        className="text-lg"
+        className="text-gray-600"
         whileHover={{ scale: 1.1, rotate: 5 }}
         transition={{ type: "spring", stiffness: 400 }}
       >
@@ -65,37 +85,37 @@ export default function Footer() {
     {
       title: "Product",
       links: [
-        { name: "SoulWhispers", href: "#apps" },
-        { name: "GymKey", href: "#apps" },
-        { name: "Platform", href: "#about" },
-        { name: "Roadmap", href: "#roadmap" }
+        { name: "SoulWhispers", href: "#apps", icon: <PsychologyIcon className="w-4 h-4" /> },
+        { name: "GymKey", href: "#apps", icon: <FitnessCenterIcon className="w-4 h-4" /> },
+        { name: "Platform", href: "#about", icon: <DashboardIcon className="w-4 h-4" /> },
+        { name: "Roadmap", href: "#roadmap", icon: <TimelineIcon className="w-4 h-4" /> }
       ]
     },
     {
       title: "Company",
       links: [
-        { name: "About", href: "#about" },
-        { name: "Why Wellnex", href: "#why" },
-        { name: "Testimonials", href: "#testimonials" },
-        { name: "Careers", href: "#" }
+        { name: "About", href: "#about", icon: <InfoIcon className="w-4 h-4" /> },
+        { name: "Why Wellnex", href: "#why", icon: <QuestionAnswerIcon className="w-4 h-4" /> },
+        { name: "Testimonials", href: "#testimonials", icon: <FormatQuoteIcon className="w-4 h-4" /> },
+        { name: "Careers", href: "#", icon: <WorkIcon className="w-4 h-4" /> }
       ]
     },
     {
       title: "Support",
       links: [
-        { name: "Help Center", href: "#" },
-        { name: "Contact", href: "mailto:info@wellnexsystems.com" },
-        { name: "Privacy", href: "#" },
-        { name: "Terms", href: "#" }
+        { name: "Help Center", href: "#", icon: <HelpCenterIcon className="w-4 h-4" /> },
+        { name: "Contact", href: "mailto:info@wellnexsystems.com", icon: <EmailIcon className="w-4 h-4" /> },
+        { name: "Privacy", href: "#", icon: <PolicyIcon className="w-4 h-4" /> },
+        { name: "Terms", href: "#", icon: <DescriptionIcon className="w-4 h-4" /> }
       ]
     }
   ]
 
   const socialLinks = [
-    { name: "Twitter", href: "#", icon: "🐦" },
-    { name: "LinkedIn", href: "#", icon: "💼" },
-    { name: "Instagram", href: "#", icon: "📸" },
-    { name: "YouTube", href: "#", icon: "🎥" }
+    { name: "Twitter", href: "#", icon: <XIcon className="w-5 h-5" /> },
+    { name: "LinkedIn", href: "#", icon: <LinkedInIcon className="w-5 h-5" /> },
+    { name: "Instagram", href: "#", icon: <InstagramIcon className="w-5 h-5" /> },
+    { name: "YouTube", href: "#", icon: <YouTubeIcon className="w-5 h-5" /> }
   ]
 
   return (
@@ -114,11 +134,11 @@ export default function Footer() {
                 className="flex items-center gap-3 mb-6"
               >
                 <motion.div 
-                  className="w-10 h-10 rounded-xl bg-gray-900 flex items-center justify-center text-white font-semibold"
+                  className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white font-semibold"
                   whileHover={{ rotate: 5, scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
                 >
-                  W
+                  <PsychologyIcon className="w-5 h-5" />
                 </motion.div>
                 <div>
                   <div className="text-lg font-bold text-gray-900">Wellnex Systems</div>
@@ -144,10 +164,10 @@ export default function Footer() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="space-y-3"
               >
-                <FooterLink href="mailto:info@wellnexsystems.com" icon="📧">
+                <FooterLink href="mailto:info@wellnexsystems.com" icon={<EmailIcon className="w-5 h-5" />}>
                   info@wellnexsystems.com
                 </FooterLink>
-                <FooterLink href="https://wellnexsystems.com" icon="🌐">
+                <FooterLink href="https://wellnexsystems.com" icon={<LanguageIcon className="w-5 h-5" />}>
                   wellnexsystems.com
                 </FooterLink>
               </motion.div>
@@ -170,16 +190,19 @@ export default function Footer() {
                     <li key={link.name}>
                       <motion.a
                         href={link.href}
-                        className="text-gray-600 hover:text-gray-900 transition-colors duration-300 flex items-center gap-2 group"
+                        className="text-gray-600 hover:text-gray-900 transition-colors duration-300 flex items-center gap-3 group py-1"
                         whileHover={{ x: 4 }}
                       >
+                        <div className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300">
+                          {link.icon}
+                        </div>
                         <span>{link.name}</span>
                         <motion.span
-                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 ml-auto"
                           initial={{ x: -4 }}
                           whileHover={{ x: 0 }}
                         >
-                          →
+                          <ArrowForwardIcon className="w-3 h-3" />
                         </motion.span>
                       </motion.a>
                     </li>
@@ -210,7 +233,7 @@ export default function Footer() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="flex items-center gap-4"
+              className="flex items-center gap-3"
             >
               {socialLinks.map((social) => (
                 <motion.a
@@ -220,9 +243,12 @@ export default function Footer() {
                   whileHover={{ scale: 1.1, y: -2 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <span className="text-sm group-hover:scale-110 transition-transform duration-300">
+                  <motion.div
+                    className="group-hover:scale-110 transition-transform duration-300"
+                    whileHover={{ rotate: 5 }}
+                  >
                     {social.icon}
-                  </span>
+                  </motion.div>
                 </motion.a>
               ))}
             </motion.div>
@@ -237,23 +263,26 @@ export default function Footer() {
             >
               <motion.a
                 href="#privacy"
-                className="hover:text-gray-900 transition-colors duration-300"
+                className="hover:text-gray-900 transition-colors duration-300 flex items-center gap-1"
                 whileHover={{ y: -1 }}
               >
-                Privacy Policy
+                <PolicyIcon className="w-3 h-3" />
+                Privacy
               </motion.a>
               <motion.a
                 href="#terms"
-                className="hover:text-gray-900 transition-colors duration-300"
+                className="hover:text-gray-900 transition-colors duration-300 flex items-center gap-1"
                 whileHover={{ y: -1 }}
               >
-                Terms of Service
+                <DescriptionIcon className="w-3 h-3" />
+                Terms
               </motion.a>
               <motion.a
                 href="#cookies"
-                className="hover:text-gray-900 transition-colors duration-300"
+                className="hover:text-gray-900 transition-colors duration-300 flex items-center gap-1"
                 whileHover={{ y: -1 }}
               >
+                <CookieIcon className="w-3 h-3" />
                 Cookies
               </motion.a>
             </motion.div>
@@ -268,6 +297,9 @@ export default function Footer() {
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-center mb-8"
         >
+          <div className="flex justify-center mb-4">
+            <GroupsIcon className="w-12 h-12 text-white opacity-80" />
+          </div>
           <h3 className="text-2xl font-bold text-white mb-3">
             Ready to Transform Wellness?
           </h3>
@@ -281,16 +313,12 @@ export default function Footer() {
             className="inline-flex items-center gap-3 px-8 py-4 bg-white text-gray-900 font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <span>Join the Movement</span>
-            <motion.svg
-              className="w-4 h-4"
+            <motion.div
               animate={{ x: [0, 4, 0] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </motion.svg>
+              <ArrowForwardIcon className="w-4 h-4" />
+            </motion.div>
           </motion.a>
         </motion.div>
       </div>

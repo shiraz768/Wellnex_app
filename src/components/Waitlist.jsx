@@ -1,5 +1,16 @@
 import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useInView } from 'framer-motion'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
+import LocalOfferIcon from '@mui/icons-material/LocalOffer'
+import FeedbackIcon from '@mui/icons-material/Feedback'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import EmailIcon from '@mui/icons-material/Email'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import GroupsIcon from '@mui/icons-material/Groups'
+import ContactMailIcon from '@mui/icons-material/ContactMail'
+import PolicyIcon from '@mui/icons-material/Policy'
+import DescriptionIcon from '@mui/icons-material/Description'
 
 export default function Waitlist() {
   const [email, setEmail] = useState('')
@@ -77,6 +88,42 @@ export default function Waitlist() {
     }
   }
 
+  const features = [
+    { 
+      icon: <RocketLaunchIcon className="w-6 h-6" />, 
+      title: "Early Access", 
+      desc: "Be first to try new features" 
+    },
+    { 
+      icon: <LocalOfferIcon className="w-6 h-6" />, 
+      title: "Exclusive Offers", 
+      desc: "Founding member benefits" 
+    },
+    { 
+      icon: <FeedbackIcon className="w-6 h-6" />, 
+      title: "Direct Feedback", 
+      desc: "Shape product development" 
+    }
+  ]
+
+  const footerLinks = [
+    { 
+      label: "Contact Us", 
+      href: "mailto:info@wellnexsystems.com",
+      icon: <ContactMailIcon className="w-4 h-4" />
+    },
+    { 
+      label: "Privacy Policy", 
+      href: "#privacy",
+      icon: <PolicyIcon className="w-4 h-4" />
+    },
+    { 
+      label: "Terms of Service", 
+      href: "#terms",
+      icon: <DescriptionIcon className="w-4 h-4" />
+    }
+  ]
+
   return (
     <section id="waitlist" ref={ref} className="py-20 bg-white">
       <div className="max-w-4xl mx-auto px-6 lg:px-8">
@@ -144,7 +191,7 @@ export default function Waitlist() {
               variants={itemVariants}
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8"
             >
-              <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+              <AccessTimeIcon className="w-4 h-4 text-emerald-400" />
               <span className="text-sm font-medium text-white tracking-wide">
                 Early Access
               </span>
@@ -173,9 +220,7 @@ export default function Waitlist() {
                 animate={{ opacity: 1, scale: 1 }}
                 className="inline-flex items-center gap-3 px-6 py-4 bg-emerald-500/20 backdrop-blur-sm border border-emerald-400/30 rounded-xl mb-8"
               >
-                <svg className="w-5 h-5 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+                <CheckCircleIcon className="w-5 h-5 text-emerald-400" />
                 <span className="text-emerald-100 font-medium">
                   Welcome aboard! We'll be in touch soon with updates.
                 </span>
@@ -190,14 +235,17 @@ export default function Waitlist() {
                 className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto"
               >
                 <motion.div className="flex-1" whileHover={{ y: -2 }}>
-                  <input
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    required
-                    className="w-full px-6 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
-                    placeholder="Enter your email address"
-                  />
+                  <div className="relative">
+                    <EmailIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <input
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      type="email"
+                      required
+                      className="w-full pl-12 pr-4 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white/30 focus:border-white/30 transition-all duration-300"
+                      placeholder="Enter your email address"
+                    />
+                  </div>
                 </motion.div>
                 
                 <motion.button
@@ -221,17 +269,14 @@ export default function Waitlist() {
                     </>
                   ) : (
                     <>
+                      <GroupsIcon className="w-5 h-5" />
                       <span>Join Waitlist</span>
-                      <motion.svg
-                        className="w-4 h-4"
+                      <motion.div
                         animate={{ x: [0, 4, 0] }}
                         transition={{ duration: 1.5, repeat: Infinity }}
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
                       >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </motion.svg>
+                        <ArrowForwardIcon className="w-4 h-4" />
+                      </motion.div>
                     </>
                   )}
                 </motion.button>
@@ -243,19 +288,18 @@ export default function Waitlist() {
               variants={itemVariants}
               className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-2xl mx-auto mt-12 pt-8 border-t border-white/20"
             >
-              {[
-                { icon: "🚀", title: "Early Access", desc: "Be first to try new features" },
-                { icon: "💝", title: "Exclusive Offers", desc: "Founding member benefits" },
-                { icon: "💬", title: "Direct Feedback", desc: "Shape product development" }
-              ].map((feature, index) => (
+              {features.map((feature, index) => (
                 <motion.div
                   key={index}
                   className="text-center group"
                   whileHover={{ y: -5 }}
                 >
-                  <div className="text-2xl mb-3 group-hover:scale-110 transition-transform duration-300">
+                  <motion.div 
+                    className="text-white mb-3 group-hover:scale-110 transition-transform duration-300 flex justify-center"
+                    whileHover={{ rotate: 5 }}
+                  >
                     {feature.icon}
-                  </div>
+                  </motion.div>
                   <div className="text-white font-semibold mb-1">{feature.title}</div>
                   <div className="text-gray-400 text-sm">{feature.desc}</div>
                 </motion.div>
@@ -267,17 +311,14 @@ export default function Waitlist() {
               variants={itemVariants}
               className="flex justify-center gap-6 mt-8 pt-8 border-t border-white/20"
             >
-              {[
-                { label: "Contact Us", href: "mailto:info@wellnexsystems.com" },
-                { label: "Privacy Policy", href: "#privacy" },
-                { label: "Terms of Service", href: "#terms" }
-              ].map((link, index) => (
+              {footerLinks.map((link, index) => (
                 <motion.a
                   key={index}
                   href={link.href}
-                  className="text-gray-400 hover:text-white text-sm font-medium transition-colors duration-300"
+                  className="text-gray-400 hover:text-white text-sm font-medium transition-colors duration-300 flex items-center gap-2"
                   whileHover={{ y: -2 }}
                 >
+                  {link.icon}
                   {link.label}
                 </motion.a>
               ))}

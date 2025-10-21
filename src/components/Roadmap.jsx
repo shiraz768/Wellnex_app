@@ -1,5 +1,23 @@
 import React, { useState, useRef } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useInView } from 'framer-motion'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import AutorenewIcon from '@mui/icons-material/Autorenew'
+import ScheduleIcon from '@mui/icons-material/Schedule'
+import FlagIcon from '@mui/icons-material/Flag'
+import TimelineIcon from '@mui/icons-material/Timeline'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch'
+import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import PsychologyIcon from '@mui/icons-material/Psychology'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import MonitorHeartIcon from '@mui/icons-material/MonitorHeart'
+import RestaurantIcon from '@mui/icons-material/Restaurant'
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter'
+import AnalyticsIcon from '@mui/icons-material/Analytics'
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import GroupIcon from '@mui/icons-material/Group'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 function RoadmapItem({ phase, title, description, features, status, index, isInView }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -27,10 +45,39 @@ function RoadmapItem({ phase, title, description, features, status, index, isInV
   }
 
   const statusConfig = {
-    'completed': { color: 'bg-emerald-500', text: 'Completed', icon: '✓' },
-    'active': { color: 'bg-blue-500', text: 'In Progress', icon: '⟳' },
-    'upcoming': { color: 'bg-gray-400', text: 'Coming Soon', icon: '⧗' }
+    'completed': { 
+      color: 'bg-emerald-500', 
+      text: 'Completed', 
+      icon: <CheckCircleIcon className="w-4 h-4" />
+    },
+    'active': { 
+      color: 'bg-blue-500', 
+      text: 'In Progress', 
+      icon: <AutorenewIcon className="w-4 h-4 animate-spin" />
+    },
+    'upcoming': { 
+      color: 'bg-gray-400', 
+      text: 'Coming Soon', 
+      icon: <ScheduleIcon className="w-4 h-4" />
+    }
   }
+
+  const phaseIcons = {
+    1: <RocketLaunchIcon className="w-6 h-6" />,
+    2: <IntegrationInstructionsIcon className="w-6 h-6" />,
+    3: <DashboardIcon className="w-6 h-6" />
+  }
+
+  const featureIcons = [
+    <PsychologyIcon className="w-4 h-4" />,
+    <FitnessCenterIcon className="w-4 h-4" />,
+    <AnalyticsIcon className="w-4 h-4" />,
+    <MonitorHeartIcon className="w-4 h-4" />,
+    <RestaurantIcon className="w-4 h-4" />,
+    <BusinessCenterIcon className="w-4 h-4" />,
+    <HealthAndSafetyIcon className="w-4 h-4" />,
+    <TrendingUpIcon className="w-4 h-4" />
+  ]
 
   const statusInfo = statusConfig[status]
 
@@ -72,16 +119,21 @@ function RoadmapItem({ phase, title, description, features, status, index, isInV
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-4">
             <motion.div
-              className={`w-12 h-12 rounded-xl ${statusInfo.color} bg-opacity-10 flex items-center justify-center text-lg font-semibold ${status === 'completed' ? 'text-emerald-600' : status === 'active' ? 'text-blue-600' : 'text-gray-600'}`}
+              className={`w-12 h-12 rounded-xl ${statusInfo.color} bg-opacity-10 flex items-center justify-center text-lg font-semibold ${
+                status === 'completed' ? 'text-emerald-600' : 
+                status === 'active' ? 'text-blue-600' : 
+                'text-gray-600'
+              }`}
               whileHover={{ scale: 1.1, rotate: 5 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              {phase}
+              {phaseIcons[phase]}
             </motion.div>
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className={`w-2 h-2 rounded-full ${statusInfo.color} animate-pulse`} />
-                <span className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                <span className="text-sm font-medium text-gray-500 uppercase tracking-wide flex items-center gap-1">
+                  <FlagIcon className="w-3 h-3" />
                   Phase {phase}
                 </span>
               </div>
@@ -93,10 +145,14 @@ function RoadmapItem({ phase, title, description, features, status, index, isInV
 
           {/* Status Badge */}
           <motion.div
-            className={`px-3 py-1 rounded-full text-sm font-medium ${status === 'completed' ? 'bg-emerald-500 text-white' : status === 'active' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-600'} flex items-center gap-2`}
+            className={`px-3 py-1 rounded-full text-sm font-medium ${
+              status === 'completed' ? 'bg-emerald-500 text-white' : 
+              status === 'active' ? 'bg-blue-500 text-white' : 
+              'bg-gray-100 text-gray-600'
+            } flex items-center gap-2`}
             whileHover={{ scale: 1.05 }}
           >
-            <span>{statusInfo.icon}</span>
+            {statusInfo.icon}
             <span>{statusInfo.text}</span>
           </motion.div>
         </div>
@@ -117,16 +173,20 @@ function RoadmapItem({ phase, title, description, features, status, index, isInV
               className="flex items-center gap-3 group/feature"
             >
               <motion.div
-                className={`w-6 h-6 rounded-full ${status === 'completed' ? 'bg-emerald-500' : status === 'active' ? 'bg-blue-500' : 'bg-gray-400'} bg-opacity-10 flex items-center justify-center flex-shrink-0`}
+                className={`w-6 h-6 rounded-full ${
+                  status === 'completed' ? 'bg-emerald-500' : 
+                  status === 'active' ? 'bg-blue-500' : 
+                  'bg-gray-400'
+                } bg-opacity-10 flex items-center justify-center flex-shrink-0`}
                 whileHover={{ scale: 1.1 }}
               >
-                <svg 
-                  className={`w-3 h-3 ${status === 'completed' ? 'text-emerald-500' : status === 'active' ? 'text-blue-500' : 'text-gray-400'}`} 
-                  fill="currentColor" 
-                  viewBox="0 0 20 20"
-                >
-                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                </svg>
+                <div className={`${
+                  status === 'completed' ? 'text-emerald-500' : 
+                  status === 'active' ? 'text-blue-500' : 
+                  'text-gray-400'
+                }`}>
+                  {featureIcons[featureIndex] || <CheckCircleIcon className="w-3 h-3" />}
+                </div>
               </motion.div>
               <span className="text-gray-700 group-hover/feature:text-gray-900 transition-colors duration-300">
                 {feature}
@@ -205,7 +265,7 @@ export default function Roadmap() {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm mb-6">
-            <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+            <TimelineIcon className="w-4 h-4 text-blue-500" />
             <span className="text-sm font-medium text-gray-700 tracking-wide">
               Product Roadmap
             </span>
@@ -242,6 +302,9 @@ export default function Roadmap() {
           className="text-center mt-12"
         >
           <div className="bg-white rounded-2xl border border-gray-200 p-8 max-w-2xl mx-auto">
+            <div className="flex justify-center mb-4">
+              <GroupIcon className="w-12 h-12 text-gray-400" />
+            </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-3">
               Join Our Journey
             </h3>
@@ -257,14 +320,7 @@ export default function Roadmap() {
               className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto group"
             >
               <span>Get Early Access</span>
-              <motion.svg
-                className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </motion.svg>
+              <ArrowForwardIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </motion.button>
           </div>
         </motion.div>
