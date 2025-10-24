@@ -1,217 +1,225 @@
-// src/components/Navbar.jsx
-import React, { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import { getNavbarData } from '../data/appData';
-
-// Icon mapping function
-const getIconComponent = (iconName) => {
-  const icons = {
-    PsychologyIcon: PsychologyIcon,
-    // Add other icons as needed
-  };
-  return icons[iconName] || PsychologyIcon;
-};
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { hoverLift } from "../animations/motionVariants";
+import { dataService } from "../services/dataService";
 
 export default function Navbar() {
-  const [active, setActive] = useState("hero");
+  const [navbarData, setNavbarData] = useState(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const { scrollY } = useScroll();
-  const lastScrollY = useRef(0);
-  const [navbarVisible, setNavbarVisible] = useState(true);
-  const navbarRef = useRef(null);
-  const timeoutRef = useRef(null);
+  const [activeItem, setActiveItem] = useState("");
+  const [visible, setVisible] = useState(true);
+  const [lastY, setLastY] = useState(0);
 
-  const navbarData = getNavbarData();
-  const LogoIcon = getIconComponent(navbarData.logo.icon);
+  
+  useEffect(() => {
+    const fetchNavbarData = async () => {
+      const data = await dataService.getComponentData("navbar");
+      setNavbarData(data);
+    };
+    fetchNavbarData();
+  }, []);
 
-  // Smooth fade background on scroll - changed to pure black
-  const scrollYProgress = useTransform(scrollY, [0, 400], [0, 1]);
-  const bgOpacity = useTransform(scrollYProgress, [0, 1], [0.2, 0.95]);
-  const borderOpacity = useTransform(scrollYProgress, [0, 1], [0, 0.2]);
-
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el && navbarRef.current) {
-      const offset = navbarRef.current.offsetHeight;
-      const top = el.getBoundingClientRect().top + window.scrollY - offset;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-    setMobileMenuOpen(false);
-  };
-
-  // Hide navbar on scroll down
+  
   useEffect(() => {
     const handleScroll = () => {
       const y = window.scrollY;
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      setIsScrolled(y > 60);
 
-      if (y > lastScrollY.current && y > 100 && !isHovering) {
-        timeoutRef.current = setTimeout(() => setNavbarVisible(false), 100);
-      } else setNavbarVisible(true);
-
-      lastScrollY.current = y;
-
-      const sections = ["hero", "about", "apps", "why", "roadmap", "testimonials", "waitlist"];
-      const pos = y + 100;
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = document.getElementById(sections[i]);
-        if (section) {
-          const { offsetTop, offsetHeight } = section;
-          if (pos >= offsetTop && pos < offsetTop + offsetHeight) {
-            setActive(sections[i]);
-            break;
-          }
-        }
+      // hide on scroll down, show on scroll up
+      if (y > lastY && y > 120) {
+        setVisible(false);
+      } else {
+        setVisible(true);
       }
+      setLastY(y);
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      if (timeoutRef.current) clearTimeout(timeoutRef.current);
-    };
-  }, [isHovering]);
 
-  const mobileMenuVariants = {
-    open: { opacity: 1, height: "100vh", transition: { duration: 0.4 } },
-    closed: { opacity: 0, height: 0, transition: { duration: 0.3 } },
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastY]);
+
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveItem(entry.target.id);
+        });
+      },
+      { threshold: 0.5, rootMargin: "-20% 0px -70% 0px" }
+    );
+
+    const sections = document.querySelectorAll("section[id]");
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  const scrollToSection = (id) => {
+    setMobileMenuOpen(false);
+    setActiveItem(id);
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) {
+        const offset = 80;
+        const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: "smooth" });
+      }
+    }, 100);
   };
 
-  return (
-    <>
-      {/* Navbar */}
-      <motion.header
-        ref={navbarRef}
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: navbarVisible ? 0 : -100, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        className="fixed top-0 left-0 w-full z-50 font-[Copilot] border-b border-white/10"
-        style={{
-          background: 'black',
-          borderColor: `rgba(255, 255, 255, ${borderOpacity.get()})`,
-        }}
-        onMouseEnter={() => setIsHovering(true)}
-        onMouseLeave={() => setIsHovering(false)}
+  
+  if (!navbarData) {
+    return (
+      <nav
+        className={`fixed top-0 w-full z-50 transition-transform duration-300 ${
+          visible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
+        }`}
+        style={{ transformOrigin: "top" }}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-12 py-4">
-          {/* Logo */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex items-center gap-3 cursor-pointer"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between bg-primary text-white">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-lg bg-white/10 flex items-center justify-center">
+              <span className="text-white font-bold">W</span>
+            </div>
+            <div className="text-white font-copilot font-semibold">Wellnex</div>
+          </div>
+        </div>
+      </nav>
+    );
+  }
+
+  return (
+    <AnimatePresence>
+    <motion.nav
+  key="navbar"
+  initial={{ y: -80, opacity: 0 }}
+  animate={{ y: visible ? 0 : -90, opacity: visible ? 1 : 0 }}
+  transition={{ duration: 0.35, ease: 'easeInOut' }}
+  className={`fixed top-0 left-0 right-0 w-full z-50 ${
+    isScrolled ? 'bg-primary text-white shadow-soft' : 'bg-primary text-white'
+  }`}
+>
+        <div
+          className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 transition-all duration-300 py-3  flex items-center justify-between bg-primary text-white`}
+        >
+          
+          <div
             onClick={() => scrollToSection("hero")}
+            className="flex items-center gap-3 cursor-pointer"
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white to-gray-300 flex items-center justify-center text-black font-bold shadow-lg shadow-white/20">
-              <LogoIcon className="text-base" />
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-white text-lg tracking-tight font-semibold font-display">{navbarData.logo.text}</span>
-              <span className="text-[11px] text-gray-400 tracking-wider">{navbarData.logo.subtext}</span>
-            </div>
-          </motion.div>
+            {navbarData.logo? (
+              <img
+                src={navbarData.logo.icon}
+                alt={navbarData.logo?.text || "Wellnex"}
+                className="h-16 w-auto"
+              />
+            ) : (
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-white/10 rounded-lg italic  flex items-center justify-center">
+                  <span className="text-white font-bold">W</span>
+                </div>
+                <div className="hidden sm:flex flex-col leading-tight">
+                  <span className="font-copilot font-semibold text-white italic">
+                    {navbarData.logo?.text || "Wellnex"}
+                  </span>
+                  <span className="text-xs tracking-wide text-white/80">
+                    {navbarData.logo?.subtext || "Systems"}
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
 
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-10">
-            {navbarData.navItems.map((item) => (
-              <motion.button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className={`relative text-sm tracking-wide transition-colors duration-300 ${
-                  active === item.id ? "text-white" : "text-gray-300 hover:text-white"
-                }`}
-                whileHover={{ y: -2 }}
-              >
-                {item.label}
-                {active === item.id && (
-                  <motion.div
-                    layoutId="underline"
-                    className="absolute -bottom-1 left-0 w-full h-[2px] bg-gradient-to-r from-white to-gray-300"
-                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
-                  />
-                )}
-              </motion.button>
-            ))}
+          {/* Desktop Menu */}
+          <div className="hidden lg:flex items-center space-x-2 font-copilot">
+            {navbarData.navItems?.map((item, idx) => {
+              const active = activeItem === item.id;
+              const baseLink = "text-white";
+              const activeClass = active ? "underline" : "";
+
+                return (
+                <motion.button
+                  key={item.id}
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.04 }}
+                  onClick={() => scrollToSection(item.id)}
+                  whileHover={hoverLift.whileHover}
+                  className={`px-4 py-2 rounded-lg text-sm  border border-none transition-all duration-200 ${baseLink} hover:text-white/90 hover:border-white ${activeClass}`}
+                >
+                  {item.label}
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {/* CTA + Mobile */}
+          <div className="flex items-center gap-3">
+            {/* CTA: white pill with primary text to contrast with aqua background */}
             <motion.button
-              onClick={() => scrollToSection(navbarData.ctaButton.target)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
-              className="ml-6 px-6 py-2.5 rounded-lg font-medium text-black bg-gradient-to-r from-white via-gray-200 to-gray-300 shadow-lg shadow-white/20 hover:shadow-white/40 transition-all duration-300"
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              onClick={() => scrollToSection(navbarData.ctaButton?.target || "waitlist")}
+              whileHover={hoverLift.whileHover}
+              transition={hoverLift.transition}
+              className="hidden lg:inline-flex items-center gap-3 px-5 py-2 rounded-xl border font-semibold transition-all duration-200 bg-white text-primary shadow-soft hover:border-primary hover:py-4 hover:shadow-aqua-glow"
             >
-              {navbarData.ctaButton.text}
+              {navbarData.ctaButton?.text || "Join Waitlist"}
             </motion.button>
-          </nav>
 
-          {/* Mobile Button */}
-          <motion.button
-            className="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-lg bg-black hover:bg-gray-900 transition-colors border border-gray-700"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            whileTap={{ scale: 0.9 }}
-          >
-            <motion.span
-              animate={{ rotate: mobileMenuOpen ? 45 : 0, y: mobileMenuOpen ? 6 : 0 }}
-              className="block w-5 h-0.5 bg-white mb-1.5 rounded-full"
-            />
-            <motion.span
-              animate={{ opacity: mobileMenuOpen ? 0 : 1 }}
-              className="block w-5 h-0.5 bg-white mb-1.5 rounded-full"
-            />
-            <motion.span
-              animate={{ rotate: mobileMenuOpen ? -45 : 0, y: mobileMenuOpen ? -6 : 0 }}
-              className="block w-5 h-0.5 bg-white rounded-full"
-            />
-          </motion.button>
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 rounded-lg transition-all duration-200 border border-white/20 bg-white/10"
+              aria-label="Toggle menu"
+            >
+              <div className="w-5 h-5 flex flex-col justify-center space-y-1">
+                <span className="block w-full h-0.5 bg-white" />
+                <span className="block w-full h-0.5 bg-white" />
+                <span className="block w-full h-0.5 bg-white" />
+              </div>
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
             <motion.div
-              className="lg:hidden fixed inset-0 bg-black/98 backdrop-blur-2xl z-40 text-white"
-              initial="closed"
-              animate="open"
-              exit="closed"
-              variants={mobileMenuVariants}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.28 }}
+              className="lg:hidden overflow-hidden bg-primary text-white border-t border-white/10"
             >
-              <div className="flex flex-col h-full pt-24 px-8 font-sans">
-                {navbarData.navItems.map((item) => (
-                  <motion.button
+              <div className="py-3 space-y-1">
+                {navbarData.navItems?.map((item, i) => (
+                  <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
-                    className={`text-2xl font-medium py-4 px-4 text-left rounded-lg transition-colors duration-300 ${
-                      active === item.id
-                        ? "text-white bg-gray-900"
-                        : "text-gray-300 hover:text-white hover:bg-gray-900"
+                    className={`w-full text-left px-4 py-3 rounded-lg font-copilot text-sm transition-all duration-200 ${
+                      activeItem === item.id
+                        ? "text-white bg-white/10"
+                        : "text-white hover:bg-white/5"
                     }`}
-                    whileHover={{ x: 10 }}
-                    whileTap={{ scale: 0.98 }}
                   >
                     {item.label}
-                  </motion.button>
+                  </button>
                 ))}
-                <motion.button
-                  onClick={() => scrollToSection(navbarData.ctaButton.target)}
-                  className="mt-12 py-4 px-6 bg-gradient-to-r from-white via-gray-200 to-gray-300 text-black text-lg font-semibold rounded-lg hover:shadow-white/30"
-                  whileHover={{ scale: 1.05 }}
-                >
-                  {navbarData.ctaButton.text}
-                </motion.button>
-                <div className="mt-auto pb-8 text-gray-400 text-sm border-t border-gray-800 pt-6">
-                  <div className="font-medium text-gray-200 mb-2">Wellnex Systems</div>
-                  <div>Wellness, Reimagined</div>
-                  <div className="mt-2">© 2025 All rights reserved</div>
+                <div className="px-4">
+                  <button
+                    onClick={() => scrollToSection(navbarData.ctaButton?.target || "waitlist")}
+                    className="w-full mt-2 px-4 py-3 bg-white text-primary font-copilot font-semibold text-sm rounded-xl hover:shadow-md transition-all duration-200"
+                  >
+                    {navbarData.ctaButton?.text || "Join Waitlist"}
+                  </button>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.header>
-
-      {/* Scroll Progress Bar */}
-      <motion.div
-        className="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-white to-gray-300 z-50 origin-left"
-        style={{ scaleX: scrollYProgress }}
-      />
-    </>
+      </motion.nav>
+    </AnimatePresence>
   );
 }

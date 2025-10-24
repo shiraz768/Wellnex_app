@@ -1,9 +1,95 @@
 {
+  "hero": {
+    "badge": {
+      "text": "Wellness Technology Platform",
+      "icon": "PsychologyIcon"
+    },
+    "title": {
+      "part1": "Wellnex",
+      "part2": "Systems",
+      "gradient": "from-gray-900 to-gray-700"
+    },
+    "subtitle": "Redefining wellness through <strong>innovative technology</strong> and human-centered design",
+    "ctaButtons": [
+      {
+        "text": "Join Waitlist",
+        "target": "waitlist",
+        "variant": "primary",
+        "icon": "arrow",
+        "animation": "pulse"
+      },
+      {
+        "text": "View Products",
+        "target": "apps",
+        "variant": "secondary",
+        "icon": "down"
+      }
+    ],
+    "background": {
+      "lottieAnimation": "hero-abstract.json",
+      "gridAnimation": {
+        "enabled": true,
+        "size": "50px",
+        "opacity": 0.03
+      },
+      "gradientBlobs": [
+        {
+          "position": "top-1/4 left-1/4",
+          "size": "w-96 h-96",
+          "gradient": "from-emerald-100 to-blue-100",
+          "opacity": 0.4,
+          "animation": {
+            "duration": 8,
+            "delay": 0
+          }
+        },
+        {
+          "position": "bottom-1/4 right-1/4",
+          "size": "w-80 h-80",
+          "gradient": "from-gray-200 to-gray-300",
+          "opacity": 0.3,
+          "animation": {
+            "duration": 10,
+            "delay": 1
+          }
+        }
+      ]
+    },
+    "animations": {
+      "reduceMotion": false,
+      "parallax": {
+        "enabled": true,
+        "sensitivity": 0.5
+      },
+      "container": {
+        "staggerChildren": 0.2,
+        "delayChildren": 0.3
+      },
+      "items": {
+        "springConfig": {
+          "type": "spring",
+          "damping": 25,
+          "stiffness": 100
+        }
+      }
+    },
+    "styles": {
+      "container": "min-h-screen flex items-center justify-center overflow-hidden",
+      "title": {
+        "size": "text-5xl sm:text-6xl md:text-7xl lg:text-8xl",
+        "font": "font-heading font-bold tracking-tight leading-none"
+      },
+      "subtitle": {
+        "size": "text-xl md:text-2xl",
+        "font": "font-light tracking-wide leading-relaxed"
+      }
+    }
+  },
   "navbar": {
     "logo": {
       "text": "Wellnex",
       "subtext": "SYSTEMS",
-      "icon": "PsychologyIcon"
+      "icon": "./logo.png"
     },
     "navItems": [
       { "id": "about", "label": "About" },

@@ -1,298 +1,183 @@
-// src/components/AboutSection.jsx
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { getAboutData } from '../data/appData';
+import { useState, useEffect } from "react";
+import { dataService } from "../services/dataService";
+import AnimatedSection from "./AnimatedSection";
+import { itemVariants, hoverLift } from "../animations/motionVariants";
+import { motion } from "framer-motion";
 
-// Import all required icons
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import NatureIcon from '@mui/icons-material/Nature';
-import GroupsIcon from '@mui/icons-material/Groups';
-import FlagIcon from '@mui/icons-material/Flag';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import HandshakeIcon from '@mui/icons-material/Handshake';
-import ScheduleIcon from '@mui/icons-material/Schedule';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
-import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
+// Icons
+import FlagIcon from "@mui/icons-material/Flag";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import NatureIcon from "@mui/icons-material/Nature";
+import GroupsIcon from "@mui/icons-material/Groups";
+import HandshakeIcon from "@mui/icons-material/Handshake";
+import ScheduleIcon from "@mui/icons-material/Schedule";
+import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 
-// Icon mapping function
 const getIconComponent = (iconName) => {
   const icons = {
-    FavoriteIcon: FavoriteIcon,
-    PsychologyIcon: PsychologyIcon,
-    NatureIcon: NatureIcon,
-    GroupsIcon: GroupsIcon,
-    FlagIcon: FlagIcon,
-    TrendingUpIcon: TrendingUpIcon,
-    HandshakeIcon: HandshakeIcon,
-    ScheduleIcon: ScheduleIcon,
-    SentimentSatisfiedAltIcon: SentimentSatisfiedAltIcon,
-    RocketLaunchIcon: RocketLaunchIcon,
+    FavoriteIcon,
+    PsychologyIcon,
+    NatureIcon,
+    GroupsIcon,
+    FlagIcon,
+    HandshakeIcon,
+    ScheduleIcon,
+    SentimentSatisfiedAltIcon,
+    RocketLaunchIcon,
   };
   return icons[iconName] || FavoriteIcon;
 };
 
-export default function AboutSection() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "center start"],
-  });
+export default function About() {
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const [hoveredCard, setHoveredCard] = useState(null);
-
-  // Get dynamic data
-  const aboutData = getAboutData();
-
-  // Enhanced scroll transformations
-  const y = useTransform(scrollYProgress, [0, 1], [80, 0]);
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.3, 1]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.95, 1]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await dataService.getComponentData("about");
+        setAboutData(data);
+      } catch (error) {
+        console.error("Error loading about data:", error);
+        setAboutData(null);
+      } finally {
+        setLoading(false);
       }
-    }
-  };
+    };
 
-  const itemVariants = {
-    hidden: { y: 40, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        damping: 25,
-        stiffness: 100
-      }
-    }
-  };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <section id="about" className="py-24 bg-[#0a0a0f]">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center">
+            <div className="animate-pulse">
+              <div className="h-6 w-48 bg-gray-800 rounded-full mx-auto mb-8"></div>
+              <div className="h-16 bg-gray-800 rounded-lg mb-6"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (!aboutData) return null;
 
   return (
-    <section
-      ref={ref}
-      id="about"
-      className="relative py-24 overflow-hidden bg-white"
-    >
-      {/* Background Elements */}
+    <section id="about" className="relative py-24 bg-[#0a0a0f] text-white">
+      {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Subtle grid pattern */}
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
+        {/* Grid texture */}
+        <div
+          className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage: `
-              linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px)
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
             `,
-            backgroundSize: '50px 50px',
+            backgroundSize: "50px 50px",
           }}
         />
-        
-        {/* Floating gradient orbs */}
-        <motion.div
-          className="absolute top-20 left-10 w-80 h-80 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-full opacity-40 blur-3xl"
-          animate={{
-            y: [0, -30, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-tr from-gray-100 to-gray-200 rounded-full opacity-30 blur-3xl"
-          animate={{
-            y: [0, 20, 0],
-            scale: [1.1, 1, 1.1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-        />
+        {/* Glow accents */}
+        <div className="absolute top-20 left-10 w-80 h-80 bg-primary/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/15 rounded-full blur-3xl" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-        <motion.div
-          style={{ y, opacity, scale }}
-          className="text-center mb-20"
-        >
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 mb-8"
-          >
+  <AnimatedSection id="about-inner" className="max-w-7xl mx-auto px-6 relative z-10">
+        {/* Header */}
+        <div className="text-center mb-20">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm mb-8">
             {aboutData.badge.icon && (
-              <FlagIcon className="w-4 h-4 text-emerald-500" />
+              <FlagIcon className="w-4 h-4 text-primary" />
             )}
-            <span className="text-sm font-medium text-gray-700 tracking-wide">
+            <span className="text-sm font-medium text-gray-300 tracking-wide">
               {aboutData.badge.text}
             </span>
-          </motion.div>
+          </div>
 
-          {/* Main Title */}
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-body font-bold text-gray-900 mb-6 tracking-tight"
-          >
-            {aboutData.title.split(' ').slice(0, -1).join(' ')}
-            <span className="block bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-              {aboutData.title.split(' ').pop()}
-            </span>
-          </motion.h2>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight text-white">
+            {aboutData.title}
+          </h2>
 
-          {/* Description */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
-          >
+          <p className="text-xl md:text-2xl text-gray-400 max-w-4xl mx-auto leading-relaxed mb-12">
             {aboutData.description}
-          </motion.p>
+          </p>
 
-          {/* Mission Statement Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.4 }}
-            className="inline-flex items-center gap-3 bg-white border border-gray-200 rounded-2xl px-8 py-6 shadow-sm hover:shadow-md transition-all duration-300 cursor-pointer group"
-            whileHover={{ y: -5, scale: 1.02 }}
-          >
+          <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl px-8 py-6 shadow-md hover:shadow-[0_0_30px_rgba(0,188,212,0.25)] transition-all duration-300 cursor-pointer group">
             {aboutData.missionStatement.icon && (
-              <RocketLaunchIcon className="w-5 h-5 text-emerald-500" />
+              <RocketLaunchIcon className="w-5 h-5 text-primary" />
             )}
             <div>
-              <div className="text-lg font-semibold text-gray-900 group-hover:text-gray-700 transition-colors duration-300">
+              <div className="text-lg font-semibold text-white group-hover:text-primary transition-colors duration-300">
                 {aboutData.missionStatement.text}
               </div>
-              <div className="text-gray-600 text-sm">
+              <div className="text-gray-400 text-sm">
                 {aboutData.missionStatement.subtext}
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Values Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20"
-        >
-          {aboutData.values.map((value, index) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-20">
+          {aboutData.values.map((value) => {
             const ValueIcon = getIconComponent(value.icon);
             return (
               <motion.div
                 key={value.title}
-                variants={itemVariants}
-                className="relative group"
-                onMouseEnter={() => setHoveredCard(index)}
-                onMouseLeave={() => setHoveredCard(null)}
+                className="bg-white/5 rounded-2xl border border-white/10 p-6 text-center hover:shadow-[0_0_25px_rgba(0,188,212,0.15)] transition-all duration-500 cursor-pointer h-full backdrop-blur-sm"
+                whileHover={hoverLift.whileHover}
+                transition={hoverLift.transition}
               >
-                <motion.div
-                  className="bg-white rounded-2xl border border-gray-200 p-6 text-center hover:shadow-lg transition-all duration-500 cursor-pointer h-full"
-                  whileHover={{ 
-                    y: -10,
-                    transition: { duration: 0.2 }
-                  }}
-                  animate={{
-                    borderColor: hoveredCard === index ? 'rgba(16, 185, 129, 0.3)' : 'rgba(229, 231, 235, 1)'
-                  }}
-                >
-                  {/* Icon */}
-                  <motion.div
-                    className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white mb-4 mx-auto group-hover:scale-110 transition-transform duration-300"
-                    whileHover={{ rotate: 5 }}
-                  >
-                    <ValueIcon className="w-6 h-6" />
-                  </motion.div>
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mb-4 mx-auto">
+                  <ValueIcon className="w-6 h-6" />
+                </div>
 
-                  {/* Content */}
-                  <h3 className="text-lg font-bold text-gray-900 mb-2">
-                    {value.title}
-                  </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {value.description}
-                  </p>
-
-                  {/* Hover indicator */}
-                  <motion.div
-                    className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    animate={hoveredCard === index ? { scaleX: [0, 1] } : {}}
-                    transition={{ duration: 0.3 }}
-                  />
-                </motion.div>
+                <h3 className="text-lg font-bold text-white mb-2">
+                  {value.title}
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed">
+                  {value.description}
+                </p>
               </motion.div>
             );
           })}
-        </motion.div>
+        </div>
 
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.6 }}
-          className="bg-gray-900 rounded-3xl p-12 text-center relative overflow-hidden"
-        >
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-blue-400/20" />
-          </div>
-
+  {/* Stats Section */}
+  <div className="bg-white/5 border border-white/10 rounded-3xl p-12 text-center relative overflow-hidden backdrop-blur-sm">
           <div className="flex items-center justify-center gap-2 mb-12 relative z-10">
-            <TrendingUpIcon className="w-6 h-6 text-white" />
+            <TrendingUpIcon className="w-6 h-6 text-primary" />
             <h3 className="text-2xl font-bold text-white">
               Our Impact in Numbers
             </h3>
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
-            {aboutData.stats.map((stat, index) => {
+            {aboutData.stats.map((stat) => {
               const StatIcon = getIconComponent(stat.icon);
               return (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                  transition={{ delay: 0.8 + (index * 0.1) }}
-                  className="text-center group"
-                >
+                <div key={stat.label} className="text-center group">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <StatIcon className="w-4 h-4" style={{ 
-                      color: index === 0 ? '#10b981' : 
-                             index === 1 ? '#3b82f6' : 
-                             index === 2 ? '#8b5cf6' : 
-                             '#f59e0b' 
-                    }} />
+                    <StatIcon className="w-5 h-5 text-primary" />
                     <div className="text-3xl font-bold text-white group-hover:scale-110 transition-transform duration-300">
                       {stat.number}
                     </div>
                   </div>
-                  <div className="text-gray-300 text-sm font-medium">
+                  <div className="text-gray-400 text-sm font-medium">
                     {stat.label}
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
-        </motion.div>
-      </div>
+        </div>
+  </AnimatedSection>
     </section>
   );
 }

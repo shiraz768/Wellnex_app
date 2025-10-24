@@ -1,173 +1,127 @@
-import React, { useState, useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform, useInView } from 'framer-motion'
-import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions'
-import PsychologyIcon from '@mui/icons-material/Psychology'
-import ScaleIcon from '@mui/icons-material/Scale'
-import ArchitectureIcon from '@mui/icons-material/Architecture'
-import GroupsIcon from '@mui/icons-material/Groups'
-import ScheduleIcon from '@mui/icons-material/Schedule'
-import TrendingUpIcon from '@mui/icons-material/TrendingUp'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useState, useEffect, useRef } from "react";
+import { motion, useInView, useMotionValue, animate } from "framer-motion";
+import {
+  ArrowForward,
+  CheckCircle,
+  IntegrationInstructions,
+  Psychology,
+  Scale,
+  Architecture,
+  Groups,
+  Schedule,
+  TrendingUp,
+} from "@mui/icons-material";
+import { dataService } from "../services/dataService";
+import { itemVariants, containerVariants as sharedContainer, hoverLift } from "../animations/motionVariants";
 
-function FeatureCard({ title, description, icon, index, isInView }) {
-  const [isHovered, setIsHovered] = useState(false)
-  const ref = useRef(null)
-  
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  
-  const mouseXSpring = useSpring(x)
-  const mouseYSpring = useSpring(y)
-  
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["5deg", "-5deg"])
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-5deg", "5deg"])
-  const translateZ = useTransform(mouseYSpring, [-0.5, 0.5], [0, 20])
+const iconMap = {
+  ArrowForward: <ArrowForward />,
+  CheckCircle: <CheckCircle />,
+  IntegrationInstructions: <IntegrationInstructions />,
+  Psychology: <Psychology />,
+  Scale: <Scale />,
+  Architecture: <Architecture />,
+  Groups: <Groups />,
+  Schedule: <Schedule />,
+  TrendingUp: <TrendingUp />,
+};
 
-  const handleMouseMove = (e) => {
-    const rect = ref.current.getBoundingClientRect()
-    const mouseX = e.clientX - rect.left
-    const mouseY = e.clientY - rect.top
-    
-    const xPct = mouseX / rect.width - 0.5
-    const yPct = mouseY / rect.height - 0.5
-    
-    x.set(xPct)
-    y.set(yPct)
+function getIcon(name) {
+  if (!name) return null;
+  try {
+    const key = name.replace?.("Icon", "");
+    return iconMap[key] ?? <span aria-hidden="true" className="w-5 h-5 inline-block" />;
+  } catch (e) {
+    return <span aria-hidden="true" className="w-5 h-5 inline-block" />;
   }
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30, scale: 0.9 }}
-      animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-      transition={{ delay: index * 0.1 + 0.3, duration: 0.6 }}
-      whileHover={{ 
-        y: -8,
-        transition: { duration: 0.2 }
-      }}
-      style={{
-        rotateX: isHovered ? rotateX : 0,
-        rotateY: isHovered ? rotateY : 0,
-        translateZ: isHovered ? translateZ : 0,
-        transformStyle: "preserve-3d",
-      }}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="relative bg-white rounded-2xl border border-gray-200/80 p-6 group cursor-pointer overflow-hidden"
-    >
-      {/* Animated background gradient */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-gray-50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        animate={isHovered ? { scale: 1.05 } : { scale: 1 }}
-      />
-
-      {/* Border glow effect */}
-      <motion.div
-        className="absolute inset-0 rounded-2xl bg-gradient-to-r from-emerald-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          padding: '1px',
-          mask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
-          maskComposite: 'subtract',
-        }}
-      />
-
-      <div className="relative z-10">
-        {/* Icon */}
-        <motion.div
-          className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform duration-300"
-          whileHover={{ rotate: 5 }}
-        >
-          {icon}
-        </motion.div>
-
-        {/* Content */}
-        <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
-          {title}
-        </h3>
-        <p className="text-gray-600 leading-relaxed text-sm">
-          {description}
-        </p>
-
-        {/* Hover indicator */}
-        <motion.div
-          className="absolute bottom-4 right-4 w-2 h-2 bg-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          animate={isHovered ? { scale: [1, 1.5, 1] } : {}}
-          transition={{ duration: 1, repeat: Infinity }}
-        />
-      </div>
-    </motion.div>
-  )
 }
 
 export default function Why() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: '-50px' })
-
-  const features = [
-    {
-      title: 'Integrated Wellness Ecosystem',
-      description: 'Seamlessly connect physical, mental, and emotional health data in one unified platform for holistic wellbeing tracking.',
-      icon: <IntegrationInstructionsIcon className="w-6 h-6" />
-    },
-    {
-      title: 'AI-Driven Personalization',
-      description: 'Smart algorithms analyze your patterns to deliver tailored recommendations and insights that evolve with your journey.',
-      icon: <PsychologyIcon className="w-6 h-6" />
-    },
-    {
-      title: 'Enterprise-Grade Scalability',
-      description: 'From boutique studios to national gym chains, our platform scales to meet the needs of any wellness business.',
-      icon: <ScaleIcon className="w-6 h-6" />
-    },
-    {
-      title: 'Future-Ready Architecture',
-      description: 'Cloud-native, mobile-first design with privacy-by-default principles ensures your data remains secure and accessible.',
-      icon: <ArchitectureIcon className="w-6 h-6" />
-    }
-  ]
-
-  const stats = [
-    { 
-      number: '50K+', 
-      label: 'Active Users',
-      icon: <GroupsIcon className="w-4 h-4 text-emerald-500" />
-    },
-    { 
-      number: '99.9%', 
-      label: 'Uptime',
-      icon: <ScheduleIcon className="w-4 h-4 text-blue-500" />
-    },
-    { 
-      number: '40%', 
-      label: 'Faster Results',
-      icon: <TrendingUpIcon className="w-4 h-4 text-purple-500" />
-    }
-  ]
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.2,
-        staggerChildren: 0.1
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const [forceVisible, setForceVisible] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!isInView) {
+        console.warn('Why: useInView did not trigger — applying forceVisible fallback');
+        setForceVisible(true);
       }
-    }
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [isInView]);
+
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      console.log("🚀 Fetching WHY data...");
+      try {
+        const res = await dataService.getComponentData("why");
+        console.log("✅ WHY data fetched:", res);
+        if (!res) {
+          setError(new Error('No data received for component: why'));
+          return;
+        }
+        setData(res);
+      } catch (err) {
+        console.error("❌ Failed fetching WHY data", err);
+        setError(err);
+      }
+    })();
+  }, []);
+
+  if (error) {
+    return (
+      <section className="py-20 text-center text-red-500">
+        Something went wrong loading this section.
+      </section>
+    );
   }
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        damping: 25,
-        stiffness: 100
+  if (!data) {
+    return (
+      <section className="py-20 text-center text-gray-500">Loading...</section>
+    );
+  }
+
+  const { badge, title, description, features, stats, bottomCta } = data;
+  const containerVariants = sharedContainer;
+
+  function StatNumber({ value, trigger }) {
+    const mv = useMotionValue(0);
+    const [display, setDisplay] = useState(String(value));
+
+    useEffect(() => {
+      const str = String(value).trim();
+      const m = str.match(/^([0-9]+(?:\.[0-9]+)?)(%)?$/);
+      if (!m) {
+        setDisplay(str);
+        return;
       }
-    }
+
+      const target = parseFloat(m[1]);
+      const suffix = m[2] || "";
+      const decimals = m[1].includes(".") ? m[1].split(".")[1].length : 0;
+
+      let controls;
+      if (trigger) {
+        controls = animate(mv, target, { duration: 1.2, ease: "easeOut" });
+      }
+
+      const unsub = mv.on("change", (v) => {
+        setDisplay(Number(v).toLocaleString(undefined, { maximumFractionDigits: decimals }) + suffix);
+      });
+
+      setDisplay(Number(mv.get()).toLocaleString(undefined, { maximumFractionDigits: decimals }) + suffix);
+
+      return () => {
+        unsub();
+        if (controls) controls.stop();
+      };
+    }, [value, trigger]);
+
+    return <>{display}</>;
   }
 
   return (
@@ -176,39 +130,35 @@ export default function Why() {
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          animate={isInView || forceVisible ? "visible" : "hidden"}
           className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center"
         >
-          {/* Left Content */}
           <div className="space-y-8">
             <motion.div variants={itemVariants}>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 mb-6">
-                <CheckCircleIcon className="w-4 h-4 text-emerald-500" />
-                <span className="text-sm font-medium text-gray-700 tracking-wide">
-                  Why Choose Wellnex
-                </span>
-              </div>
+              {badge && (
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 mb-6">
+                  {getIcon(badge.icon)}
+                  <span className="text-sm font-medium text-gray-700 tracking-wide">
+                    {badge.text}
+                  </span>
+                </div>
+              )}
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">
-                The Complete Wellness Platform
+                {title}
               </h2>
 
               <p className="text-xl text-gray-600 leading-relaxed mb-8">
-                Integrated features, AI personalization, and enterprise-ready tooling make Wellnex the platform for the next generation of wellness.
+                {description}
               </p>
 
-              {/* Stats */}
               <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-200">
-                {stats.map((stat, index) => (
-                  <motion.div
-                    key={index}
-                    variants={itemVariants}
-                    className="text-center group"
-                  >
+                {stats?.map((stat, index) => (
+                  <motion.div key={stat.id ?? index} variants={itemVariants} className="text-center group">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                      {stat.icon}
+                      {getIcon(stat.icon)}
                       <div className="text-2xl font-bold text-gray-900 group-hover:scale-110 transition-transform duration-300">
-                        {stat.number}
+                        <StatNumber value={stat.number} trigger={isInView || forceVisible} />
                       </div>
                     </div>
                     <div className="text-sm text-gray-600 font-medium">
@@ -220,50 +170,53 @@ export default function Why() {
             </motion.div>
           </div>
 
-          {/* Right Content - Feature Grid */}
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-1 sm:grid-cols-2 gap-6"
-          >
-            {features.map((feature, index) => (
-              <FeatureCard
-                key={feature.title}
-                title={feature.title}
-                description={feature.description}
-                icon={feature.icon}
-                index={index}
-                isInView={isInView}
-              />
+          <motion.div variants={containerVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {features?.map((feature, index) => (
+              <motion.div
+                key={feature.id ?? index}
+                variants={itemVariants}
+                whileHover={hoverLift.whileHover}
+                transition={hoverLift.transition}
+                className="relative bg-white rounded-2xl border border-gray-200/80 p-6 group cursor-pointer overflow-hidden hover:shadow-lg"
+              >
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white mb-4">
+                  {getIcon(feature.icon)}
+                </div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2 leading-tight">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-sm">{feature.description}</p>
+              </motion.div>
             ))}
           </motion.div>
         </motion.div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.8 }}
-          className="text-center mt-16 pt-12 border-t border-gray-200"
-        >
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">
-            Ready to Transform Your Wellness Journey?
-          </h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Join thousands of users and businesses already experiencing the future of integrated wellness technology.
-          </p>
-          <motion.button
-            whileHover={{ 
-              scale: 1.05,
-              y: -2
-            }}
-            whileTap={{ scale: 0.98 }}
-            className="px-8 py-4 bg-gray-900 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto group"
+        {bottomCta && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView || forceVisible ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.8 }}
+            className="text-center mt-16 pt-12 border-t border-gray-200"
           >
-            <span>Start Your Journey</span>
-            <ArrowForwardIcon className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
-          </motion.button>
-        </motion.div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Ready to Transform Your Wellness Journey?
+            </h3>
+            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+              Join thousands of users and businesses already experiencing the future of integrated wellness technology.
+            </p>
+            <motion.button
+              whileHover={{ scale: 1.05, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              className="px-8 py-4 bg-primary text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-3 mx-auto group"
+            >
+              <span>{bottomCta.text}</span>
+              <motion.span whileHover={{ x: 6 }} className="inline-flex">
+                {getIcon(bottomCta.icon)}
+              </motion.span>
+            </motion.button>
+          </motion.div>
+        )}
       </div>
     </section>
-  )
+  );
 }

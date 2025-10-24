@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, useMotionValue, useSpring, useTransform, useInView, AnimatePresence } from 'framer-motion'
+import AnimatedSection from './AnimatedSection'
+import { itemVariants, hoverLift } from '../animations/motionVariants'
 import FormatQuoteIcon from '@mui/icons-material/FormatQuote'
 import StarIcon from '@mui/icons-material/Star'
 import StarBorderIcon from '@mui/icons-material/StarBorder'
@@ -15,36 +17,16 @@ import PauseIcon from '@mui/icons-material/Pause'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import GroupsIcon from '@mui/icons-material/Groups'
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople'
+import { dataService } from '../services/dataService'
 
-const TESTIMONIALS = [
-  { 
-    quote: 'SoulWhispers helped me find calm in chaos. The AI insights and personalized meditation sessions have been transformative. It’s like having a therapist in my pocket.', 
-    author: 'Ayesha R.',
-    role: 'Mental Wellness Advocate',
-    location: 'Karachi',
-    avatar: <PsychologyIcon className="w-6 h-6" />,
-    rating: 5,
-    icon: <FavoriteIcon className="w-5 h-5" />
-  },
-  { 
-    quote: 'GymKey has completely transformed how I manage my fitness business. The seamless check-in system and member analytics have increased retention by 40%. My members love the convenience.', 
-    author: 'Imran M.',
-    role: 'Gym Owner',
-    location: 'Lahore',
-    avatar: <FitnessCenterIcon className="w-6 h-6" />,
-    rating: 5,
-    icon: <BusinessCenterIcon className="w-5 h-5" />
-  },
-  { 
-    quote: 'The Wellnex platform brought all my wellness data together. From workout tracking to mental health insights, having everything in one dashboard has been a game-changer for my holistic health journey.', 
-    author: 'Sarah T.',
-    role: 'Wellness Coach',
-    location: 'Islamabad',
-    avatar: <EmojiPeopleIcon className="w-6 h-6" />,
-    rating: 5,
-    icon: <GroupsIcon className="w-5 h-5" />
-  }
-]
+const iconMap = {
+  'PsychologyIcon': PsychologyIcon,
+  'FitnessCenterIcon': FitnessCenterIcon,
+  'EmojiPeopleIcon': EmojiPeopleIcon,
+  'BusinessCenterIcon': BusinessCenterIcon,
+  'FavoriteIcon': FavoriteIcon,
+  'GroupsIcon': GroupsIcon
+}
 
 function TestimonialCard({ testimonial, index, isActive, onClick }) {
   const [isHovered, setIsHovered] = useState(false)
@@ -60,6 +42,7 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-3deg", "3deg"])
 
   const handleMouseMove = (e) => {
+    if (!ref.current) return
     const rect = ref.current.getBoundingClientRect()
     const mouseX = e.clientX - rect.left
     const mouseY = e.clientY - rect.top
@@ -70,6 +53,9 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
     x.set(xPct)
     y.set(yPct)
   }
+
+  const AvatarIcon = iconMap[testimonial.avatar] || PersonIcon
+  const RoleIcon = iconMap[testimonial.roleIcon] || BusinessCenterIcon
 
   return (
     <motion.div
@@ -100,7 +86,6 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
           : 'border-gray-200 shadow-sm scale-95'
       }`}
     >
-      {/* Active indicator bar */}
       {isActive && (
         <motion.div
           layoutId="activeIndicator"
@@ -111,7 +96,6 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
       )}
 
       <div className="p-8">
-        {/* Quote Icon */}
         <motion.div
           initial={{ opacity: 0, scale: 0 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -121,9 +105,8 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
           <FormatQuoteIcon className="w-8 h-8 text-emerald-500 opacity-20" />
         </motion.div>
 
-        {/* Rating Stars */}
         <div className="flex gap-1 mb-6">
-          {[...Array(testimonial.rating)].map((_, i) => (
+          {[...Array(testimonial.rating || 5)].map((_, i) => (
             <motion.div
               key={i}
               initial={{ scale: 0, rotate: -180 }}
@@ -135,7 +118,6 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
           ))}
         </div>
 
-        {/* Quote */}
         <motion.blockquote
           className="text-xl text-gray-700 leading-relaxed mb-6"
           initial={{ opacity: 0 }}
@@ -145,14 +127,13 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
           "{testimonial.quote}"
         </motion.blockquote>
 
-        {/* Author Info */}
         <div className="flex items-center gap-4">
           <motion.div
             className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-blue-500 flex items-center justify-center text-white"
             whileHover={{ scale: 1.1, rotate: 5 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            {testimonial.avatar}
+            <AvatarIcon className="w-6 h-6" />
           </motion.div>
           
           <div className="flex-1">
@@ -161,7 +142,7 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
               <div className="font-semibold text-gray-900">{testimonial.author}</div>
             </div>
             <div className="flex items-center gap-2 mb-1">
-              {testimonial.icon}
+              <RoleIcon className="w-4 h-4 text-gray-400" />
               <div className="text-sm text-gray-600">{testimonial.role}</div>
             </div>
             <div className="flex items-center gap-2">
@@ -178,27 +159,67 @@ function TestimonialCard({ testimonial, index, isActive, onClick }) {
 export default function Testimonials() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [autoPlay, setAutoPlay] = useState(true)
+  const [testimonialsData, setTestimonialsData] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-50px' })
 
+  useEffect(() => {
+    const fetchTestimonialsData = async () => {
+      try {
+        setIsLoading(true)
+        const data = await dataService.getComponentData('testimonials')
+        
+        if (data && data.testimonials) {
+          setTestimonialsData(data)
+        } else {
+          throw new Error('No testimonials data found')
+        }
+      } catch (error) {
+        console.error('Failed to load testimonials data:', error)
+        setTestimonialsData({
+          badge: { text: "User Stories" },
+          title: "Trusted by Wellness Champions",
+          description: "Discover how Wellnex Systems is transforming lives and businesses across the wellness industry",
+          testimonials: [
+            { 
+              quote: 'SoulWhispers helped me find calm in chaos. The AI insights and personalized meditation sessions have been transformative. It\'s like having a therapist in my pocket.', 
+              author: 'Ayesha R.',
+              role: 'Mental Wellness Advocate',
+              location: 'Karachi',
+              avatar: 'PsychologyIcon',
+              rating: 5,
+              roleIcon: 'FavoriteIcon'
+            }
+          ]
+        })
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchTestimonialsData()
+  }, [])
+
   const nextTestimonial = () => {
-    setActiveIndex((current) => (current + 1) % TESTIMONIALS.length)
+    if (!testimonialsData?.testimonials) return
+    setActiveIndex((current) => (current + 1) % testimonialsData.testimonials.length)
   }
 
   const prevTestimonial = () => {
-    setActiveIndex((current) => (current - 1 + TESTIMONIALS.length) % TESTIMONIALS.length)
+    if (!testimonialsData?.testimonials) return
+    setActiveIndex((current) => (current - 1 + testimonialsData.testimonials.length) % testimonialsData.testimonials.length)
   }
 
-  // Auto-play functionality
   useEffect(() => {
-    if (!autoPlay || !isInView) return
+    if (!autoPlay || !isInView || !testimonialsData?.testimonials) return
 
     const interval = setInterval(() => {
       nextTestimonial()
     }, 5000)
 
     return () => clearInterval(interval)
-  }, [autoPlay, isInView])
+  }, [autoPlay, isInView, testimonialsData])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -224,22 +245,39 @@ export default function Testimonials() {
     }
   }
 
+  if (isLoading) {
+    return (
+      <section id="testimonials" className="py-20 bg-gray-50/50">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <div className="text-gray-600">Loading testimonials...</div>
+        </div>
+      </section>
+    )
+  }
+
+  if (!testimonialsData) {
+    return (
+      <section id="testimonials" className="py-20 bg-gray-50/50">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+          <div className="text-red-600">Failed to load testimonials data</div>
+        </div>
+      </section>
+    )
+  }
+
+  const testimonials = testimonialsData.testimonials || []
+
   return (
     <section id="testimonials" ref={ref} className="py-20 bg-gray-50/50">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-          className="text-center mb-16"
-        >
+        <AnimatedSection className="text-center mb-16">
           <motion.div
             variants={itemVariants}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-gray-200 shadow-sm mb-6"
           >
             <FormatQuoteIcon className="w-4 h-4 text-emerald-500" />
             <span className="text-sm font-medium text-gray-700 tracking-wide">
-              User Stories
+              {testimonialsData.badge?.text || "User Stories"}
             </span>
           </motion.div>
 
@@ -247,33 +285,32 @@ export default function Testimonials() {
             variants={itemVariants}
             className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight"
           >
-            Trusted by Wellness Champions
+            {testimonialsData.title || "Trusted by Wellness Champions"}
           </motion.h2>
 
           <motion.p
             variants={itemVariants}
             className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed"
           >
-            Discover how Wellnex Systems is transforming lives and businesses across the wellness industry
+            {testimonialsData.description || "Discover how Wellnex Systems is transforming lives and businesses across the wellness industry"}
           </motion.p>
-        </motion.div>
+        </AnimatedSection>
 
-        {/* Testimonials Carousel */}
         <div className="max-w-6xl mx-auto">
-          {/* Main Active Testimonial */}
           <div className="mb-8">
             <AnimatePresence mode="wait">
-              <TestimonialCard
-                key={activeIndex}
-                testimonial={TESTIMONIALS[activeIndex]}
-                index={activeIndex}
-                isActive={true}
-                onClick={() => {}}
-              />
+              {testimonials[activeIndex] && (
+                <TestimonialCard
+                  key={activeIndex}
+                  testimonial={testimonials[activeIndex]}
+                  index={activeIndex}
+                  isActive={true}
+                  onClick={() => {}}
+                />
+              )}
             </AnimatePresence>
           </div>
 
-          {/* Navigation Controls */}
           <motion.div
             variants={itemVariants}
             className="flex items-center justify-center gap-4 mb-12"
@@ -287,18 +324,17 @@ export default function Testimonials() {
               <NavigateBeforeIcon className="w-5 h-5 text-gray-600 group-hover:text-gray-900" />
             </motion.button>
 
-            {/* Indicator Dots */}
             <div className="flex gap-2 mx-8">
-              {TESTIMONIALS.map((_, index) => (
+              {testimonials.map((_, index) => (
                 <motion.button
                   key={index}
                   onClick={() => setActiveIndex(index)}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
                   className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === activeIndex 
-                      ? 'bg-gray-900 scale-125' 
-                      : 'bg-gray-300 hover:bg-gray-400'
+            index === activeIndex 
+              ? 'bg-primary scale-125' 
+              : 'bg-gray-300 hover:bg-gray-400'
                   }`}
                 />
               ))}
@@ -313,7 +349,6 @@ export default function Testimonials() {
               <NavigateNextIcon className="w-5 h-5 text-gray-600 group-hover:text-gray-900" />
             </motion.button>
 
-            {/* Auto-play Toggle */}
             <motion.button
               onClick={() => setAutoPlay(!autoPlay)}
               whileHover={{ scale: 1.05 }}
@@ -329,21 +364,22 @@ export default function Testimonials() {
             </motion.button>
           </motion.div>
 
-          {/* Additional Testimonials Grid */}
-          <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            {TESTIMONIALS.filter((_, index) => index !== activeIndex).map((testimonial, index) => (
-              <TestimonialCard
-                key={testimonial.author}
-                testimonial={testimonial}
-                index={index}
-                isActive={false}
-                onClick={() => setActiveIndex(TESTIMONIALS.findIndex(t => t.author === testimonial.author))}
-              />
-            ))}
-          </motion.div>
+          {testimonials.length > 1 && (
+            <motion.div
+              variants={itemVariants}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {testimonials.filter((_, index) => index !== activeIndex).map((testimonial, index) => (
+                <TestimonialCard
+                  key={testimonial.author}
+                  testimonial={testimonial}
+                  index={index}
+                  isActive={false}
+                  onClick={() => setActiveIndex(testimonials.findIndex(t => t.author === testimonial.author))}
+                />
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
     </section>
